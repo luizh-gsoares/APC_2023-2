@@ -1,0 +1,14 @@
+algoritmo aula2exerA;
+// Síntese
+//  Objetivo:  Cadastro de clientes de uma oficina mecânica, mantendo dados dos seus respectivos automoveis.
+//	           Tem como objetivo gerar beneficios e descontos para estreitar relacionamentos.
+//  Entrada :  nome, cpf, telefone, endereco, carro, placa, chassis, historico 
+//  Saída   :  confirmação de cadastro, historico de procedimentos realizados e/ou mensagens de erros.
+
+
+principal
+	// Declarações
+
+	// Instruções
+
+fimPrincipal

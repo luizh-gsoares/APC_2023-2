@@ -1,0 +1,20 @@
+algoritmo aula3exer1;
+// Síntese
+//  Objetivo: Informar se o usuário foi multado
+//  Entrada : Velocidade em Km/h
+//  Saída   : Multado ou não multado
+
+
+principal
+	// Declarações
+	inteiro velocidade;
+	
+	// Instruções
+	escreval("Digite a velocidade : ");
+	leia(velocidade);
+	
+	se (velocidade > 80) entao
+	escreval("Você foi multado ! ");
+	fimSe
+	
+fimPrincipal

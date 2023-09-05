@@ -1,0 +1,32 @@
+algoritmo aula3exer10;
+// Síntese
+//  Objetivo:	Encontrar o menor valor
+//  Entrada :	3 numeros reais
+//  Saída   :	o valor do número menor
+
+
+principal
+	// Declarações
+	real num1, num2, num3;
+
+	// Instruções
+	escreval("Digite três números inteiros :");
+	leia(num1, num2, num3);
+
+	se ((num1 < num2) e (num1 < num3)) entao
+		escreval("O valor " + num1 + " é o menor");
+	fimSe
+	
+	se ((num2 < num1) e (num2 < num3)) entao
+		escreval("O valor " + num2 + " é o menor");
+	fimSe
+
+	se ((num3 < num1) e (num3 < num2)) entao
+		escreval("O valor " + num3 + " é o menor");
+	fimSe
+
+	se (num1 == num2 == num3) entao
+	escreval("Todos os números são iguais.");
+	fimSe
+
+fimPrincipal

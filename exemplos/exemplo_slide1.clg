@@ -1,0 +1,17 @@
+algoritmo Analisar_idade;
+// Síntese
+// Objetivo: analisar idade da pessoa
+// Entrada: idade
+// Saída: classifica em idosa ou jovem
+principal
+// Declarações
+inteiro idade;
+// Instruções
+escreva("Informe sua idade: ");
+leia (idade);
+se (idade < 25) entao
+escreva ("VOCE É JOVEM!");
+senao
+escreva ("VOCE É IDOSO!");
+fimSe
+fimPrincipal

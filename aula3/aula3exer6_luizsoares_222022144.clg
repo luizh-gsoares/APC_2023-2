@@ -1,0 +1,22 @@
+algoritmo aula3exer6;
+// Síntese
+//  Objetivo:	Verificar número par ou ímpar
+//  Entrada :	Um inteiro
+//  Saída   :	Uma frase indicando se é par ou impar
+
+
+principal
+	// Declarações
+	inteiro numero;
+
+	// Instruções
+	escreval("Digite um número inteiro :");
+	leia(numero);
+
+	se (numero % 2 == 0) entao
+		escreval("Número digitado é par.");
+	senao
+		escreval("Número digitado é ímpar.");
+	fimSe
+
+fimPrincipal

@@ -1,0 +1,21 @@
+algoritmo aula3exer3;
+// Síntese
+//  Objetivo:	Verificar se forma um triângulo
+//  Entrada :	3 variáveis de lados
+//  Saída   :	Se forma ou não
+
+
+principal
+	// Declarações
+	real ladoA, ladoB, ladoC;
+
+	// Instruções
+	escreval("Digite 3 valores para formar um triângulo : ");
+	leia(ladoA, ladoB, ladoC);
+	
+	se ((ladoA + ladoB > ladoC) e (ladoA + ladoC > ladoB) e (ladoB + ladoC > ladoA)) entao
+		escreval("Forma um triângulo");
+	senao
+		escreval("Não forma um triângulo");
+	fimSe
+fimPrincipal
