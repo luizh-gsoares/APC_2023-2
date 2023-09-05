@@ -1,0 +1,21 @@
+algoritmo aula2exer3;
+// Síntese
+//  Objetivo:	Calcular a média aritmética de 3 números
+//  Entrada :	três numeros reais
+//  Saída   :	valor da media
+
+
+principal
+	// Declarações
+	real num1, num2, num3;
+	real media;
+
+	// Instruções
+	escreval("Digite três números reais : ");
+	leia(num1, num2, num3);
+
+	media = (num1 + num2 + num3) / 3;
+
+	escreval("Média = ", media:0:4);
+	
+fimPrincipal

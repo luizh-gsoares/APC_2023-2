@@ -1,0 +1,22 @@
+algoritmo aula2exer1;
+// Síntese
+//  Objetivo: Algoritmo que converte horas em minutos e segundos
+//  Entrada : um inteiro de horas
+//  Saída   : inteiro de minutos e segundos
+
+
+principal
+	// Declarações
+	inteiro horas, minutos, segundos;
+	
+	// Instruções
+	escreva("Digite as horas:");
+	leia(horas);
+
+	minutos = horas * 60;
+	segundos = minutos * 60;
+
+	escreval("Total minutos  : " + minutos);
+	escreval("Total segundos : " + segundos);
+	
+fimPrincipal

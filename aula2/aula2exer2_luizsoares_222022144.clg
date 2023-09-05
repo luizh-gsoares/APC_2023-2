@@ -1,0 +1,20 @@
+algoritmo aula2exer2;
+// Síntese
+//  Objetivo:	Calcular área de uma circuferência
+//  Entrada :	um numero real raio
+//  Saída   :	um numero real area
+
+principal
+	// Declarações
+	real area, raio;
+	
+	// Instruções
+	
+	escreval("Digite o raio da circunferência : ");
+	leia(raio);
+
+	area = pi() * exp(raio, 2);
+
+	escreval("A area da circunferência é : " + area);
+	
+fimPrincipal

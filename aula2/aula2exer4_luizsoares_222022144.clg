@@ -1,0 +1,23 @@
+algoritmo aula2exer4;
+// Síntese
+//  Objetivo:	Retornar valores do quociente e resto da divisão
+//  Entrada :	dois numeros inteiros, num1 e num2
+//  Saída   :	quociente e resto 
+
+
+principal
+	// Declarações
+	inteiro num1, num2, quociente, resto;
+	
+	// Instruções
+	escreval("Digite 2 numeros inteiros : ");
+	leia(num1, num2);
+
+	quociente = num1 / num2;
+	resto = num1 % num2;
+
+	escreval("Quociente = " + quociente);
+	escreval("Resto 	= " + resto);
+	
+fimPrincipal
+
