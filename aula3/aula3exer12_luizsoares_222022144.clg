@@ -1,0 +1,45 @@
+algoritmo aula3exer12;
+// Síntese
+//  Objetivo:	Informar cidade do DDD digitado
+//  Entrada :	Um número inteiro
+//  Saída   :	Cidade correspondente ao DDD
+
+
+principal
+	// Declarações
+	inteiro codigo;
+
+	// Instruções
+	escreval("Digite o DDD que deseja consultar e pressione ENTER : ");
+	leia(codigo);
+	
+	escolha(codigo)
+	caso 61
+		escreval("Brasília");
+		interrompa;
+	caso 71
+		escreval("Salvador");
+		interrompa;
+	caso 11
+		escreval("São Paulo");
+		interrompa;
+	caso 21
+		escreval("Rio de Janeiro");
+		interrompa;
+	caso 32
+		escreval("Juiz de Fora");
+		interrompa;
+	caso 19
+		escreval("Campinas");
+		interrompa;
+	caso 27
+		escreval("Vitória");
+		interrompa;
+	caso 31
+		escreval("Belo Horizonte");
+		interrompa;
+	outroCaso
+		escreval("DDD ", codigo, " desconhecido");
+	fimEscolha
+	
+fimPrincipal

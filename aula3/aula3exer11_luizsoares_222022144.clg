@@ -1,0 +1,34 @@
+algoritmo aula3exer11;
+// Síntese
+//  Objetivo:	Verificar se forma um triângulo e classificar o tipo de triângulo
+//  Entrada :	3 variáveis de lados
+//  Saída   :	Informar se forma triângulo e seu tipo (equilátero, isósceles ou escaleno)
+
+
+principal
+	// Declarações
+	real ladoA, ladoB, ladoC;
+
+	// Instruções
+	escreval("Digite 3 valores para formar um triângulo (Pressione ENTER): ");
+	leia(ladoA, ladoB, ladoC);
+
+	// Verificar se forma triângulo
+	se ((ladoA + ladoB > ladoC) e (ladoA + ladoC > ladoB) e (ladoB + ladoC > ladoA)) entao
+		escreval("Forma um triângulo");
+
+		// Classificar o tipo de triângulo
+        se ((ladoA == ladoB) e (ladoB == ladoC)) entao
+            escreval("Triângulo equilátero (todos os lados são iguais)");
+        senao
+            se ((ladoA == ladoB) ou (ladoB == ladoC) ou (ladoA == ladoC)) entao
+                escreval("Triângulo isósceles (dois lados iguais)");
+            senao
+                escreval("Triângulo escaleno (todos os lados são diferentes)");
+            fimSe
+        fimSe
+	senao
+		escreval("Não forma um triângulo");
+	fimSe
+	
+fimPrincipal

@@ -1,0 +1,30 @@
+algoritmo aula3exer16;
+// Síntese
+//  Objetivo:	Calcular o valor a ser pago pela provedora de acesso à Internet.
+//  Entrada :	Quantidade de horas utilizadas
+//  Saída   :	Valor total gasto, quantidade de horas
+
+
+principal
+	// Declarações
+	inteiro quantidadeHoras;
+	real valorBase, valorTotal, valorExtra;
+
+	valorBase = 30.00;
+	valorExtra = 3.00; // 10% do valor base
+
+	// Instruções
+	escreval("Digite a quantidade de horas que foram utilizadas e pressione ENTER: ");
+	leia(quantidadeHoras);
+
+	se (quantidadeHoras <= 20) entao
+		// Valor base para até 20 horas
+		valorTotal = valorBase;
+	senao
+		// Valor base acrescido de 10% por hora excedente
+		valorTotal = valorBase + ((quantidadeHoras - 20) * valorExtra);
+	fimSe
+
+	escreval("Total gasto: R$", valorTotal:0:2);
+	escreval("Quantidade de horas utilizadas: ", quantidadeHoras);
+fimPrincipal
