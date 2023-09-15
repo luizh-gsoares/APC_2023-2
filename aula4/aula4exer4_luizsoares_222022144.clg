@@ -1,0 +1,34 @@
+algoritmo aula4exer4;
+// Síntese
+//  Objetivo:	mostrar a menor altura de 10 pessoas
+//  Entrada :	10 numeros reais de altura
+//  Saída   :	menor altura
+
+
+principal
+	// Declarações
+	real menorAltura, altura;
+	inteiro contador;
+	contador = 1;		
+	menorAltura = 100;	// Valor alto para garantir que o primeiro valor seja o menor
+
+	// Instruções
+	escreval("Digite a altura no formato x.xx m e pressione ENTER");
+
+	enquanto (contador <= 10) faca
+		escreva("Digite a altura do " + contador + "° usuário : ");
+		leia(altura);
+
+		se ((altura > 3) ou (altura < 0)) entao
+			escreval("Altura inválida, digite novamente.");
+		senao
+			se (altura < menorAltura) entao
+				menorAltura = altura;
+			fimSe
+			contador = contador + 1;
+		fimSe
+	fimEnquanto
+
+	escreva("A menor altura digitada foi " + menorAltura);
+
+fimPrincipal

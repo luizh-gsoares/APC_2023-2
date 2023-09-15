@@ -1,0 +1,28 @@
+algoritmo aula4exer3;
+// Síntese
+//  Objetivo:	calcular o fatorial de um número inteiro não negativo fornecido pelo usuário e exibir o resultado
+//  Entrada :	um numero inteiro não negativo
+//  Saída   :	resultado do calculo fatorial
+
+
+principal
+	// Declarações
+	inteiro numero, fatorial, contador;
+
+	// Instruções
+	escreva("Digite um número inteiro não negativo: ");
+	leia(numero);
+
+	se (numero < 0) entao
+		escreva("O fatorial não está definido para números negativos.");
+	senao
+		fatorial = 1;
+		
+		para (contador de numero ate 1 passo -1) faca
+			fatorial = fatorial * contador;
+		fimPara
+
+		escreva("O fatorial de ", numero, " é ", fatorial);
+	fimSe
+	
+fimPrincipal

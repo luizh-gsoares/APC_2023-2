@@ -1,0 +1,31 @@
+algoritmo aula4exer1;
+// Síntese
+//  Objetivo:	calcular o fatorial de um número inteiro não negativo fornecido pelo usuário e exibir o resultado
+//  Entrada :	um numero inteiro não negativo
+//  Saída   :	resultado do calculo fatorial
+
+
+principal
+	// Declarações
+	inteiro numero, resultado;
+	inteiro i;
+
+	// Instruções
+	
+	//Entrada de dados com valores positivos
+	faca
+	escreval("Digite um número inteiro positivo: ");
+	leia(numero);
+	enquanto (numero < 0);
+
+	resultado = 1;	// Iniciar o valor de 0! = 1.
+
+	// Processamento de dados - realização do loop
+	para (i de 1 ate numero passo 1) faca
+	resultado = resultado * i;
+	fimPara
+
+	// Saída de dados
+	escreval("Resultado do fatorial =  " + resultado);
+	
+fimPrincipal

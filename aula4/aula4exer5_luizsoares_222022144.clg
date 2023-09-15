@@ -1,0 +1,28 @@
+algoritmo aula4exer5;
+// Síntese
+//  Objetivo:	Realizar cálculo da expressão H = 1 + 1/2 + 1/3 + ... + 1/n
+//  Entrada :	Um numero n fornecido pelo usuário
+//  Saída   :	Resultado de H
+
+principal
+	// Declarações
+	inteiro n;
+	real H;
+	H = 0.0;
+
+	// Instruções
+	escreval("Escreva um número inteiro n positivo e pressione ENTER : ");
+	leia(n);
+
+	se (n < 0) entao
+		escreval("O número digitado é negativo, execute novamente o programa.");
+	fimSe
+
+	enquanto (n > 0) faca
+		H = H + (1/n);
+		n = n-1;
+	fimEnquanto
+
+	escreva("O resultado foi :  " + H);
+
+fimPrincipal
