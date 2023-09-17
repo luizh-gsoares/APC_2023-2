@@ -1,0 +1,32 @@
+algoritmo aula4exer2;
+// Síntese
+//  Objetivo:	Realizar uma mutiplicação de 2 números positivos, utilizando comandos Para
+//  Entrada :	dois numeros inteiros
+//  Saída   :	o resultado da multiplicação
+
+
+principal
+	// Declarações
+	inteiro num1, num2, resultado, i;
+
+	// Instruções
+	escreval("Digite apenas números positivos e pressione ENTER");
+	escreva("Digite o primeiro número : ");
+	leia(num1);
+	escreva("Digite o segundo número : ");
+	leia(num2);
+
+	resultado = 0;
+
+	se ((num1 < 0) ou (num2 < 0)) entao
+		escreva("Por favor, digite apenas números positivos.");
+	senao
+		para (i de 1 ate num2 passo 1) faca
+			resultado = resultado + num1;
+		fimPara
+		limpaTela();
+		escreval("O resultado da multiplicação é : ", resultado);
+	fimSe
+
+fimPrincipal
+ 

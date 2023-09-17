@@ -1,0 +1,45 @@
+algoritmo aula3exer17;
+// Síntese
+//  Objetivo:	Exibir o nome da pessoa com a menor altura
+//  Entrada :	3 nomes, 3 alturas
+//  Saída   :	menor altura e nome em minusculo
+
+
+principal
+	// Declarações
+	texto nome1, nome2, nome3, menorNome;
+	real altura1, altura2, altura3, menorAltura;
+
+
+	// Instruções
+	escreval("Informe o nome da primeira pessoa: ");
+	leia(nome1);
+	escreval("Informe a altura da primeira pessoa: ");
+	leia(altura1);
+
+	escreval("Informe o nome da segunda pessoa: ");
+	leia(nome2);
+	escreval("Informe a altura da segunda pessoa: ");
+	leia(altura2);
+
+	escreval("Informe o nome da terceira pessoa: ");
+	leia(nome3);
+	escreval("Informe a altura da terceira pessoa: ");
+	leia(altura3);
+
+	se ((altura1 < altura2) e (altura1 < altura3)) entao
+		menorNome = nome1;
+		menorAltura = altura1;
+	senao
+		se ((altura2 < altura1) e (altura2 < altura3)) entao
+			menorNome = nome2;
+			menorAltura = altura2;
+		senao
+			menorNome = nome3;
+			menorAltura = altura3;
+		fimSe
+	fimSe
+
+	escreval("Pessoa com menor nome é " + minusculo(menorNome) + " com altura de " + menorAltura +"m.");
+
+fimPrincipal

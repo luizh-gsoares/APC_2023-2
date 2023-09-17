@@ -1,0 +1,33 @@
+algoritmo aula3exer18;
+// Síntese
+//  Objetivo:	Converter o nome em minúsculas e estimar o número aproximado de dias vividos. Vale ressaltar 
+//				que este algoritmo conta apenas anos inteiros, sem considerar anos bisextos.
+//  Entrada :	um inteiro correspodente ao ano de nascimento, um inteiro de ano atual e uma string de nome
+//  Saída   :	o nome em minusculo e os dias vividos
+
+
+principal
+	// Declarações
+	inteiro anoNascimento, anoAtual, diasVividos;
+	texto   nome, nomeMinusculo;
+
+	// Instruções
+	escreva("Digite o seu nome: ");
+	leia(nome);
+
+	faca
+	escreva("Digite o seu ano de nascimento : ");
+	leia(anoNascimento);
+	escreva("Digite o ano atual : ");
+	leia(anoAtual);
+	enquanto ((anoNascimento > anoAtual) e (anoNascimento > 0) e (anoAtual > 0)); // estrutura do-while que permite somente ano válido
+
+
+	diasVividos = (anoAtual - anoNascimento) * 365;
+	nomeMinusculo = minusculo(nome);
+
+	escreval(nomeMinusculo);
+	escreval("Você viveu " + diasVividos + " dias. ");
+	
+
+fimPrincipal
