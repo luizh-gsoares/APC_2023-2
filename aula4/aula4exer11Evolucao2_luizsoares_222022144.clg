@@ -1,0 +1,36 @@
+algoritmo somarTermo;
+// Síntese
+//  Objetivo:	Cacular os 30 termos de uma serie
+//  Entrada :	--
+//  Saída   :	Resultado
+
+
+principal
+	// Declarações
+	inteiro cont, aux, denominador;
+	real numerador, soma;
+
+	soma = 0;
+	numerador = 480;
+	denominador = 10;
+	cont = 1;
+
+	// Instruções
+	enquanto (cont <= 30) faca
+		// decidir o sinal
+		aux = denominador % 2;
+		se (aux == 0) entao
+			soma = soma + (numerador / denominador);
+		senao
+			soma = soma - (numerador / denominador);
+		fimSe
+
+		numerador = numerador - 5;
+		denominador = denominador + 1;
+		cont = cont + 1;
+
+	fimEnquanto
+
+	escreva("Resultado = " , soma:2:3);
+
+fimPrincipal
