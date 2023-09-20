@@ -1,0 +1,84 @@
+algoritmo somaNotas;
+// Síntese
+//  Objetivo:	Mostrar ganhador de um concurso de piadas
+//  Entrada :	nome dos tres finalistas, nota dos finalistas, quantidade de juizes
+//  Saída   :	Vencedor do concurso
+
+
+principal
+	// Declarações
+	texto nome1, nome2, nome3;
+	real nota1, nota2, nota3;
+	real total1, total2, total3;
+	inteiro juizes, i;
+
+	// Instruções
+
+	// Leia o nome dos 3 finalistas
+	escreval("Digite o nome do primeiro finalista: ");
+	leia(nome1);
+	escreval("Digite o nome do segundo finalista: ");
+	leia(nome2);
+	escreval("Digite o nome do terceiro finalista: ");
+	leia(nome3);
+
+	// Leia a quantidade de juízes
+	escreval("Digite a quantidade de juízes participantes: ");
+	leia(juizes);
+
+	// Inicialize os totais
+	total1 = 0;
+	total2 = 0;
+	total3 = 0;
+
+	// Leia as notas de cada juiz para os finalistas
+	para (i de 1 ate juizes passo 1) faca
+		faca
+
+			limpaTela();
+			escreval("---------------------");
+			escreval("	Juiz ", i, ":");
+			escreval("---------------------");
+
+			// NOTA 1
+			escreval("Nota para ", nome1, ": ");
+			leia(nota1);
+			total1 = total1 + nota1;
+
+			// NOTA 2
+			escreval("Nota para ", nome2, ": ");
+			leia(nota2);
+			total2 = total2 + nota2;
+
+			// NOTA 3
+			escreval("Nota para ", nome3, ": ");
+			leia(nota3);
+			total3 = total3 + nota3;
+		enquanto (((nota1 < 0) ou (nota1 > 100)) ou ((nota2 < 0) ou (nota2 > 100)) ou ((nota3 < 0) ou (nota3 > 100)));
+	fimPara
+
+	// Determine o vencedor ou vencedores
+	se ((total1 > total2) e (total1 > total3)) entao
+		escreval("Vencedor: ", nome1, " com ", total1, " pontos.");
+	senao
+		se ((total2 > total1) e (total2 > total3)) entao
+			escreval("Vencedor: ", nome2, " com ", total2, " pontos.");
+		senao
+			se ((total3 > total1) e (total3 > total2)) entao
+				escreval("Vencedor: ", nome3, " com ", total3, " pontos.");
+			senao
+				escreval("Houve empate entre os seguintes finalistas:");
+				se (total1 == total2) entao
+					escreval(nome1, " e ", nome2, " com ", total1, " pontos.");
+				fimSe
+				se (total1 == total3) entao
+					escreval(nome1, " e ", nome3, " com ", total1, " pontos.");
+				fimSe
+				se (total2 == total3) entao
+					escreval(nome2, " e ", nome3, " com ", total2, " pontos.");
+				fimSe
+			fimSe
+		fimSe
+	fimSe
+
+fimPrincipal
