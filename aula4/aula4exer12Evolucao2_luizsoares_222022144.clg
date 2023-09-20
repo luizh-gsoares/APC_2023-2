@@ -1,0 +1,76 @@
+algoritmo concursoDePiadas;
+// Síntese
+// Objetivo: Mostrar ganhador de um concurso de piadas
+// Entrada : nome dos tres finalistas, nota dos finalistas, quantidade de juizes
+// Saída : Vencedor do concurso
+
+principal
+	// Declarações
+	texto finalistas[3], vencedores;
+	inteiro notas[3], total[3];
+	inteiro juizes, i, j, maiorPontuacao;
+
+	maiorPontuacao = -1;
+	vencedores = "";
+
+	// Instruções
+
+	// Leia o nome dos 3 finalistas
+	para (i de 0 ate 2 passo 1) faca
+		escreval("Digite o nome do ", i + 1, "° finalista : ");
+		leia(finalistas[i]);
+	fimPara
+
+	// Leia a quantidade de juízes
+	escreva("Digite a quantidade de juízes e pressione ENTER : ");
+	leia(juizes);
+	enquanto (juizes < 1) faca
+		escreva("Quantidade de juízes deve ser maior de 0! escreva um valor válido: ");
+		leia(juizes);
+	fimEnquanto
+
+	// Inicialize os totais
+	para (i de 0 ate 2 passo 1) faca
+		total[i] = 0;
+	fimPara
+
+
+	// Leia as notas de cada juiz para os finalistas
+	para (i de 1 ate juizes passo 1) faca
+		limpaTela();
+		escreval("---------------------");
+		escreval("    Juiz ", i, ":");
+		escreval("---------------------");
+
+		para (j de 0 ate 2 passo 1) faca
+			// NOTA
+			escreval("Nota para ", finalistas[j], ": ");
+			leia(notas[j]);
+
+			// Verifique se a nota está dentro do intervalo permitido
+			enquanto ((notas[j] < 0) ou (notas[j] > 100)) faca
+				escreval("Nota fora do intervalo permitido. Digite novamente.");
+				escreval("Nota para ", finalistas[j], ": ");
+				leia(notas[j]);
+			fimEnquanto
+			total[j] = total[j] + notas[j]; // Soma ao total
+		fimPara
+	fimPara
+
+	// Encontre a maior pontuação
+	para (i de 0 ate 2 passo 1) faca
+		se (total[i] > maiorPontuacao)  entao
+			maiorPontuacao = total[i];
+			vencedores = finalistas[i];
+		senao
+			se (total[i] == maiorPontuacao) entao
+				vencedores = vencedores + " e " + finalistas[i];
+			fimSe
+		fimSe
+	fimPara
+
+	// Apresenta os vencedores
+	escreva("Vencedor(es): ", vencedores);
+	escreva(" com uma pontuação de ", maiorPontuacao, " pontos.");
+
+fimPrincipal
