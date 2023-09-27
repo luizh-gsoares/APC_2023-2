@@ -1,0 +1,35 @@
+algoritmo AumentarProduto;
+// Síntese
+//  Objetivo:	Aumento em todos os seus produtos de 10%, informando produto a produto.
+//  Entrada :	Preço dos produtos e opcao de continuar
+//  Saída   :	Preço reajustado
+
+
+principal
+	// Declarações
+	real preco, precoAumento;
+
+	// Instruções
+
+	// Realizar calculo
+	enquanto (preco) faca
+		preco = lerPreco();
+		precoAumento = preco + (preco * 0.10);
+		escreval("Preço do produto : R$ ", precoAumento:0:2);
+	fimEnquanto
+
+	escreval("Programa encerrado.");
+fimPrincipal
+
+funcao  real lerPreco()
+	real preco;
+	faca
+		escreva("Digite o preço do produto: R$ ");
+		leia(preco);
+	enquanto (preco < -1);
+
+	se (preco == -1) entao
+		interrompa;
+	fimSe
+	retorna preco;
+fimFuncao

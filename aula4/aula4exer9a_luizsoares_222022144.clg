@@ -1,0 +1,45 @@
+algoritmo AumentarProduto;
+// Síntese
+//  Objetivo:	Aumento em todos os seus produtos de 10%, informando a quantidade primeiro.
+//  Entrada :	Quantidade de produtos e Preço dos produtos
+//  Saída   :	Preço reajustado
+
+
+principal
+	// Declarações
+	inteiro quantidadeProdutos, contador;
+	real preco, precoAumento;
+
+
+	// Instruções
+
+	// Definir a quantidade de produtos
+	quantidadeProdutos = lerQuantidade();
+
+	// Realizar calculo
+	para (contador de 1 ate quantidadeProdutos passo 1) faca
+	preco = lerPreco(contador);
+	precoAumento = preco + (preco * 0.10);
+	escreval("Preço do " + contador + "° produto : R$ ", precoAumento:0:2);
+	fimPara
+	
+fimPrincipal
+
+funcao  inteiro lerQuantidade()
+	inteiro quantidade;
+	faca
+		escreva("Digite uma quantidade de produtos ENTER: ");
+		leia(quantidade);
+	enquanto (quantidade < 1);
+	limpaTela();
+	retorna quantidade;
+fimFuncao
+
+funcao  real lerPreco(inteiro contador)
+	real preco;
+	faca
+		escreva("Digite o preço do " + contador + "° produto: R$ ");
+		leia(preco);
+	enquanto (preco < 0);
+	retorna preco;
+fimFuncao

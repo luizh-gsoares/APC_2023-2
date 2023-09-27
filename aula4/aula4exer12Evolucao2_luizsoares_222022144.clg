@@ -53,6 +53,7 @@ principal
 				escreval("Nota para ", finalistas[j], ": ");
 				leia(notas[j]);
 			fimEnquanto
+
 			total[j] = total[j] + notas[j]; // Soma ao total
 		fimPara
 	fimPara
@@ -69,8 +70,15 @@ principal
 		fimSe
 	fimPara
 
+
+
 	// Apresenta os vencedores
+	escreverMensagem(vencedores, maiorPontuacao);
+fimPrincipal
+
+
+
+procedimento escreverMensagem (texto vencedores,inteiro maiorPontuacao)
 	escreva("Vencedor(es): ", vencedores);
 	escreva(" com uma pontuação de ", maiorPontuacao, " pontos.");
-
-fimPrincipal
+fimProcedimento
