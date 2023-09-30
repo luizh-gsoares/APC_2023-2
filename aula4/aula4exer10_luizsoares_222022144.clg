@@ -2,7 +2,7 @@ algoritmo CaracteristicasPopulacao;
 // Síntese
 //  Objetivo:	Mostrar a pessoa com a maior idade e a porcentagem de pessoas loiras com  olhos verdes.
 //  Entrada :	idade, sexo, olhos, cabelos;
-//  Saída   :	
+//  Saída   :	maior idade e porcentagem de mulheres loiras de olhos verdes.
 
 principal
 	// Declarações
