@@ -1,0 +1,118 @@
+algoritmo concursoDePiadas;
+// Síntese
+// Objetivo: Mostrar ganhador de um concurso de piadas
+// Entrada : nome dos tres finalistas, nota dos finalistas, quantidade de juizes
+// Saída : Vencedor do concurso
+
+principal
+	// Declarações
+	texto finalistas[3];
+	inteiro juizes, i, j, nota, notas[3], total[3];
+
+	// Instruções
+	
+	// Ler o nome dos finalistas
+	lerFinalistas(finalistas);
+
+	// Ler a quantidade de juízes
+	juizes = lerJuizes(juizes);
+
+	// Inicialize os totais
+	inicializarTotais(total);
+
+	// Leia as notas de cada juiz para os finalistas
+	para (i de 1 ate juizes passo 1) faca
+		limpaTela();
+		escreval("---------------------");
+		escreval("    Juiz ", i, ":");
+		escreval("---------------------");
+
+		para (j de 0 ate 2 passo 1) faca
+			// Verifique se a nota está dentro do intervalo permitido
+			escreval("Nota para ", finalistas[j], ": ");
+			notas[j] = validarNota(nota);
+			total[j] = total[j] + notas[j]; // Soma ao total
+		fimPara
+	fimPara
+
+	//Determinar a maior pontuação e vencedores
+	determinarVencedor(total, finalistas);
+fimPrincipal
+
+
+//  ====================== SUBALGORITMOS ======================
+
+// Objetivo: Determinar o nome dos 3 finalistas do concurso de piadas
+// Parâmetros: finalistas[]
+// Retorno: finalistas[]
+procedimento lerFinalistas(texto finalistas[])
+	inteiro i;
+	para (i de 0 ate 2 passo 1) faca
+		escreval("Digite o nome do ", i + 1, "° finalista : ");
+		leia(finalistas[i]);
+	fimPara
+fimProcedimento
+
+// Objetivo: Determinar a quantidade de juizes que avaliará os finalistas
+// Parâmetros: juizes
+// Retorno: juizes válido
+funcao inteiro lerJuizes(inteiro juizes)
+	limpaTela();
+	escreva("Digite a quantidade de juízes e pressione ENTER : ");
+	leia(juizes);
+	enquanto (juizes <= 0) faca
+		escreva("Quantidade de juízes deve ser maior de 0! escreva um valor válido: ");
+		leia(juizes);
+	fimEnquanto
+	retorna juizes;
+fimFuncao
+
+// Objetivo: Inicializa os valores do vetor total[]
+// Parâmetros: total[3]
+// Retorno: total[3] com valores de 0
+procedimento inicializarTotais(inteiro total[])
+	inteiro i;
+	para (i de 0 ate 2 passo 1) faca
+		total[i] = 0;
+	fimPara
+fimProcedimento
+
+// Objetivo: validar se a nota está entre 0 a 100
+// Parâmetros: nota
+// Retorno: nota válida
+funcao inteiro validarNota(inteiro nota)
+	leia(nota);
+	enquanto ((nota < 0) ou (nota > 100)) faca
+		escreva("Nota fora do intervalo permitido. Digite novamente um valor entre 0 e 100 : ");
+		leia(nota);
+	fimEnquanto
+	retorna nota;
+fimFuncao
+
+// Objetivo: Determinar o(s) vencedor(es) do concurso de piadas
+// Parâmetros: total[], finalistas[]
+// Retorno: Vencedor(es) e a maior pontuação
+procedimento determinarVencedor (inteiro total[], texto finalistas[])
+	inteiro i;
+	inteiro maiorPontuacao;
+	texto vencedores;
+
+	vencedores = "";
+	maiorPontuacao = -1;
+
+	para (i de 0 ate 2 passo 1) faca
+		se (total[i] > maiorPontuacao)  entao
+			maiorPontuacao = total[i];
+			vencedores = finalistas[i];
+		senao
+			se (total[i] == maiorPontuacao) entao
+				vencedores = vencedores + " e " + finalistas[i];
+			fimSe
+		fimSe
+	fimPara
+
+	limpaTela();
+	escreva("Vencedor(es): ", vencedores);
+	escreva(" com uma pontuação de ", maiorPontuacao, " pontos.");
+fimProcedimento
+
