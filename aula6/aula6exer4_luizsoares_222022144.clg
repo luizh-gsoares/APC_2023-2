@@ -1,0 +1,42 @@
+algoritmo verificarNumero;
+// Síntese
+//  Objetivo:	Verifica se possui o número 120 e quantas vezes se repete em um vetor de 80 elementos númericos
+//  Entrada :	80 valores
+//  Saída   :	quantas vezes o número 120 apareceu e onde apareceu
+
+
+principal
+	// Declarações
+	inteiro elementos[80];
+	inteiro quantidadeValor;
+	inteiro contador;
+
+	// Instruções
+	para (contador de 0 ate 69 passo 1) faca
+		escreva("Digite o " + (contador + 1) + "° Valor : ");
+		leia(elementos[contador]);
+	fimPara
+
+	// Procedimento para saída de dados
+	escrevePosicoes(elementos);
+fimPrincipal
+
+//  == SUBALGORITMOS ======================
+// Objetivo: Escrever o resultado da solicitação
+// Parâmetros: elementos[]
+// Retorno: quantas vezes apareceu e onde apareceu
+procedimento escrevePosicoes(inteiro elementos[])
+	inteiro contador;
+	inteiro soma;
+	soma = 0;
+	
+	limpaTela();
+	para (contador de 0 ate 69 passo 1) faca
+		se (elementos[contador] == 120) entao
+			escreval("Foi encontrado o valor 120 na posição ", contador + 1);
+			soma = soma + 1;
+		fimSe
+	fimPara
+	
+	escreval("O valor apareceu "+ soma + " vezes.");
+fimProcedimento

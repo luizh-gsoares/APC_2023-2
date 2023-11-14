@@ -1,0 +1,137 @@
+algoritmo ordenarPorMeses;
+// Síntese
+// Objetivo: Este algoritmo lê matrículas e meses de trabalho de funcionários,
+// garantindo matrículas únicas. Em seguida, ordena os funcionários por meses
+// de trabalho e exibe as informações.
+// Entrada: Matrículas e meses de trabalho de funcionários.
+// Saída: Lista de funcionários ordenados por meses de trabalho.
+
+principal
+	// Declarações
+	inteiro tamanhoTotal, matricula, mes, contador, i;
+	inteiro empregado[100], meses[100];
+	contador = 0;
+	tamanhoTotal = 5; // CONSTANTE
+
+	// Instruções
+	enquanto (contador < tamanhoTotal) faca
+
+		matricula = lerMatricula(empregado, contador); //
+		empregado[contador] = matricula;
+
+		mes = lerMes(meses, contador);
+		meses[contador] = mes;
+
+		contador = contador + 1;
+		limpaTela();
+	fimEnquanto
+
+	// ORDENAR e SAIDA DE DADOS
+	ordenarEmpregados(empregado, meses, contador);
+	escreval("MESES				MATRICULA");
+	para (i de 0 ate (contador - 1) passo 1) faca
+		escreval(meses[i] +"				" + empregado[i]);
+	fimPara
+
+fimPrincipal
+
+// ================= SUBALGORITMOS =================
+
+// Objetivo: Ler a matrícula dos empregados.
+// Entrada : Número do funcionário, matrícula.
+// Saída   : Modificação do vetor de matrículas.
+funcao inteiro lerMatricula(inteiro empregado[], inteiro contador)
+	inteiro matricula;
+	faca
+		escreva("Qual a matrícula do empregado ", contador + 1, "? (0 para encerrar): ");
+		leia(matricula);
+	enquanto (validarMatricula(empregado, matricula, contador));
+
+	se (matricula == 0) entao // Encerra na matricula 0
+		interrompa;
+	fimSe
+
+	retorna matricula;
+fimFuncao
+
+// Objetivo: Validar a matrícula do empregado.
+// Entrada : Vetor de empregados, matrícula, contador.
+// Saída   : Verificação da validade da matrícula.
+funcao logico validarMatricula(inteiro empregado[], inteiro matricula, inteiro contador)
+	inteiro segundoContador;
+
+	se (matricula < 0) entao
+		escreval("Valor inválido!!!");
+		retorna verdadeiro;
+	fimSe
+
+	se (contador > 0) entao
+		para (segundoContador de 0 ate (contador - 1) passo 1) faca
+			se (matricula == empregado[segundoContador]) entao
+				escreval("Matrícula repetida !!!");
+				retorna verdadeiro;
+			fimSe
+		fimPara
+	fimSe
+
+	retorna falso;
+fimFuncao
+
+// Objetivo: Ler o número de meses de trabalho de um empregado.
+// Entrada : Vetor de meses, contador.
+// Saída   : Valor dos meses de trabalho.
+funcao inteiro lerMes(inteiro meses[], inteiro contador)
+	inteiro mes;
+	faca
+		escreva("Quantos meses o empregado ", contador + 1, " trabalhou ? ");
+		leia(mes);
+	enquanto (validarMes(meses, mes, contador));
+
+	retorna mes;
+fimFuncao
+
+// Objetivo: Validar o número de meses de trabalho de um empregado.
+// Entrada : Vetor de meses, número de meses, contador.
+// Saída   : Verificação da validade dos meses de trabalho.
+funcao logico validarMes(inteiro meses[], inteiro mes, inteiro contador)
+	inteiro segundoContador;
+	se (mes < 0) entao
+		escreval("Valor inválido!!!");
+		retorna verdadeiro;
+	fimSe
+
+	se (contador > 0) entao
+		para (segundoContador de 0 ate (contador - 1) passo 1) faca
+			se (mes == meses[segundoContador]) entao
+				escreval("Mês repetido !!!");
+				retorna verdadeiro;
+			fimSe
+		fimPara
+	fimSe
+
+	retorna falso;
+fimFuncao
+
+// Objetivo: Ordenar o vetor de empregados com base nos meses de trabalho.
+// Entrada : Vetor de empregados, vetor de meses, número de funcionários.
+// Saída   : Vetor de empregados e meses ordenados.
+procedimento ordenarEmpregados(inteiro empregado[], inteiro meses[], inteiro funcionarios)
+	inteiro i, j, matriculaTemp, mesesTemp;
+
+	para (i de 0 ate funcionarios - 2 passo 1) faca
+		para (j de 0 ate funcionarios - 2 - i passo 1) faca
+			se (meses[j] > meses[j + 1]) entao
+				// Troca as matrículas
+				mesesTemp = meses[j];
+				meses[j] = meses[j + 1];
+				meses[j + 1] = mesesTemp;
+
+				// Troca os salários correspondentes
+				matriculaTemp = empregado[j];
+				empregado[j] = empregado[j + 1];
+				empregado[j + 1] = matriculaTemp;
+			fimSe
+		fimPara
+	fimPara
+fimProcedimento
+
