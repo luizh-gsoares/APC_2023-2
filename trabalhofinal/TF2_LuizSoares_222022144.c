@@ -45,8 +45,8 @@ int validaModalidadeCurso(char modalidadeCurso);
 
 // ========== SUBALGORITMOS  ==========
 
+// ========== INICIO LEITURA ==========
 
-// ========== INICIO CADASTRO ==========
 // Função       : lerCic
 // Objetivo     : Ler o CIC do curso
 // Parâmetros   : Nenhum
@@ -63,16 +63,6 @@ int lerCic()
 
     return cic;
 }
-
-// Função       : validaCic
-// Objetivo     : Validar o CIC do curso
-// Parâmetros   : CIC do curso
-// Saída        : 0 para válido e 1 para inválido
-int validaCic(int cic)
-{
-    return (cic < MINCIC) ? 1 : 0;
-}
-
 
 // Função       : lerNomeCompleto
 // Objetivo     : Ler o nome completo do curso
@@ -92,15 +82,6 @@ char* lerNomeCompleto()
     return nomeCompleto;
 }
 
-// Função       : validaNomeCompleto
-// Objetivo     : Validar o nome completo do curso
-// Parâmetros   : Nome completo do curso
-// Saída        : 0 para válido e 1 para inválido
-int validaNomeCompleto(char *nomeCompleto)
-{
-    return (strlen(nomeCompleto) < MINIMO || strlen(nomeCompleto) > MAXNOME || nomeCompleto[0] == '\n') ? 1 : 0;
-}
-
 // Função       : lerSiglaEscola
 // Objetivo     : Ler a sigla da escola
 // Parâmetros   : Nenhum
@@ -118,15 +99,6 @@ char* lerSiglaEscola()
     return siglaEscola;
 }
 
-// Função       : validaSiglaEscola
-// Objetivo     : Validar a sigla da escola
-// Parâmetros   : Sigla da escola
-// Saída        : 0 para válido e 1 para inválido
-int validaSiglaEscola(char *siglaEscola)
-{
-
-    return (strlen(siglaEscola) > MAXIMO || siglaEscola[0] == '\n') ? 1 : 0;
-}
 
 // Função       : lerModalidadeCurso
 // Objetivo     : Ler a modalidade do curso
@@ -146,6 +118,38 @@ char lerModalidadeCurso()
     return modalidadeCurso;
 }
 
+// ========== FIM LEITURA ==========
+
+// ========== INICIO VALIDAÇÃO ==========
+
+// Função       : validaCic
+// Objetivo     : Validar o CIC do curso
+// Parâmetros   : CIC do curso
+// Saída        : 0 para válido e 1 para inválido
+int validaCic(int cic)
+{
+    return (cic < MINCIC) ? 1 : 0;
+}
+
+// Função       : validaNomeCompleto
+// Objetivo     : Validar o nome completo do curso
+// Parâmetros   : Nome completo do curso
+// Saída        : 0 para válido e 1 para inválido
+int validaNomeCompleto(char *nomeCompleto)
+{
+    return (strlen(nomeCompleto) < MINIMO || strlen(nomeCompleto) > MAXNOME || nomeCompleto[0] == '\n') ? 1 : 0;
+}
+
+// Função       : validaSiglaEscola
+// Objetivo     : Validar a sigla da escola
+// Parâmetros   : Sigla da escola
+// Saída        : 0 para válido e 1 para inválido
+int validaSiglaEscola(char *siglaEscola)
+{
+
+    return (strlen(siglaEscola) > MAXIMO || siglaEscola[0] == '\n') ? 1 : 0;
+}
+
 // Função       : validaModalidadeCurso
 // Objetivo     : Validar a modalidade do curso
 // Parâmetros   : Modalidade do curso
@@ -153,6 +157,11 @@ char lerModalidadeCurso()
 int validaModalidadeCurso(char modalidadeCurso) {
     return (modalidadeCurso != 'P' && modalidadeCurso != 'T' && modalidadeCurso != 'E') ? 1 : 0;
 }
+
+// ========== FIM VALIDAÇÃO ==========
+
+
+// ========== INICIO CADASTRO ==========
 
 // Função       : cadastrarCurso
 // Objetivo     : Cadastrar um curso
@@ -187,8 +196,9 @@ curso cadastrarCurso()
 // ========== MAIN ==========
 int main()
 {
-    curso cursos[MAXCURSOS];    // Array de cursos
-    int opcao;                         // Opção do menu
+    curso cursos[MAXCURSOS];            // Array de cursos
+    int opcao;                          // Opção do menu
+    int numCurso = 0;                   // Número de cursos cadastrados
 
     do
     {
@@ -206,15 +216,12 @@ int main()
         switch (opcao)
         {
         case 1:
-            cursos[0] = cadastrarCurso();
+            cursos[numCurso] = cadastrarCurso();
+            numCurso++;
             break;
         case 2:
             break;
         case 3:
-            printf("%d\n",cursos[0].cic);
-            printf("%s\n",cursos[0].nomeCompleto);
-            printf("%s\n",cursos[0].siglaEscola);
-            printf("%c\n",cursos[0].modalidadeCurso);
             break;
         case 4:
             break;
@@ -233,47 +240,3 @@ int main()
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ========== SUBPROGRAMAS  ==========
-// Função       :
-// Objetivo     :
-// Parâmetros   :
-// Saída        :
