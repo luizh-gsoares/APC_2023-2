@@ -25,7 +25,6 @@
 #define MAXIMO 5
 #define MINIMO 5
 #define MINCIC 10
-#define MAXCURSOS 100
 #define MAXNOME 50
 
 // Struct para armazenar os dados de cada curso
@@ -45,6 +44,8 @@ void menuListarCursos();
 void limpaTela();
 void limparBuffer();
 void pausar();
+void dormir(int segundos);
+int continuar();
 
 // Protótipos das funções de validação
 int validaCic(int cic, FILE *arquivo);
@@ -80,6 +81,26 @@ int main()
     setlocale(LC_ALL, "pt_BR.UTF-8");
     int opcao;               // Opção do menu
     FILE *arquivo;           // Arquivo para armazenar os cursos
+
+if ((arquivo = fopen("cursos.bin", "rb")) != NULL) 
+{
+    printf("Arquivo encontrado...\n");
+    fclose(arquivo);
+    } 
+    else 
+    {
+        printf("Arquivo inexistente, aguarde a criação do arquivo...\n");
+        do {
+            if (!criarArquivo()) {
+                printf("Falha ao criar o arquivo de dados.\n");
+                printf("Deseja tentar novamente? (S/N): ");
+                int opcao = continuar();
+            } else {
+                printf("Arquivo criado com sucesso.\n");
+                break;
+            }
+        } while (continuar());
+    }
 
 
     do
@@ -832,6 +853,26 @@ FILE *abrirArquivo()
 void fecharArquivo(FILE *arquivo)
 {
     fclose(arquivo);
+}
+
+// Função       : criarArquivo
+// Objetivo     : Criar o arquivo binário
+// Parâmetros   : Nenhum
+// Saída        : Nenhuma
+int criarArquivo()
+{
+    FILE *arquivo;
+    arquivo = fopen("cursos.bin", "wb");
+
+    if (arquivo != NULL)
+    {
+        fclose(arquivo);
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 // ========== FIM ARQUIVOS ==========
