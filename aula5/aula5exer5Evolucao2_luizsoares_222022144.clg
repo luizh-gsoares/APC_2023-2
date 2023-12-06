@@ -1,0 +1,119 @@
+algoritmo calculadora;
+// Síntese
+// Algoritmo Calculadora:
+// Objetivo: Criar uma calculadora que permite ao usuário realizar operações matemáticas básicas com até três valores de entrada.
+// Entrada: Os valores numéricos e operadores são inseridos pelo usuário.
+// Saída: O resultado da operação realizada e se o resultado é par ou ímpar.
+
+
+
+principal
+	// Declarações
+	inteiro valor[3], contador;
+	real primeiroResultado, segundoResultado;
+	caracter operador[2];
+	faca
+		limpaTela();
+		para (contador de 0 ate 2 passo 1) faca
+			valor[contador] = lerValor(contador);
+		fimPara
+
+		para (contador de 0 ate 1 passo 1) faca
+			operador[contador] = lerOperacao(contador);
+		fimPara
+
+		primeiroResultado = realizarOperacao(valor[0], valor[1], operador[0]);
+		segundoResultado = realizarOperacao(primeiroResultado, valor[2], operador[1]);
+
+		escreverResultado(valor,operador,primeiroResultado,segundoResultado);
+	enquanto (lerContinuar());
+fimPrincipal
+
+// ================= SUBALGORITMOS
+
+// Função lerValor:
+// Objetivo: Ler um valor numérico da entrada padrão.
+// Parâmetros: contador (um inteiro que representa a posição do valor a ser lido).
+// Retorno: O valor numérico lido.
+funcao inteiro lerValor(inteiro contador)
+	inteiro valor;
+	escreval("Digite o "+ (contador + 1) + " ° valor : ");
+	leia(valor);
+	retorna valor;
+fimFuncao
+
+// Função lerOperacao:
+// Objetivo: Ler um operador matemático da entrada padrão.
+// Parâmetros: contador (um inteiro que representa a posição do operador a ser lido).
+// Retorno: O operador matemático lido.
+funcao caracter lerOperacao(inteiro contador)
+	caracter operador;
+	escreval("Digite o " + (contador + 1) + " ° operador : ");
+	leiaCaracter(operador);
+	retorna operador;
+fimFuncao
+
+// Função lerContinuar:
+// Objetivo: Ler a decisão do usuário para continuar ou encerrar a calculadora.
+// Retorno: Verdadeiro se o usuário deseja continuar, falso caso contrário.
+funcao logico lerContinuar()
+	caracter opcao;
+	escreval("Digite 'S' para continuar ou qualquer tecla para encerrar... ");
+	leiaCaracter(opcao);
+	se (opcao == 'S' ou opcao == 's') entao
+		retorna verdadeiro;
+	fimSe
+	retorna falso;
+fimFuncao
+
+// Função realizarOperacao:
+// Objetivo: Realizar uma operação matemática com dois valores e um operador.
+// Parâmetros: valor1 (primeiro valor numérico), valor2 (segundo valor numérico), operador (o operador a ser aplicado).
+// Retorno: O resultado da operação ou -1 em caso de erro.
+funcao inteiro realizarOperacao(inteiro valor1, inteiro valor2, caracter operador)
+	escolha(operador)
+	caso '+'
+		retorna valor1 + valor2;
+	caso '-'
+		retorna valor1 - valor2;
+	caso '*'
+		retorna valor1 * valor2;
+	caso '/'
+		se (valor2 == 0) entao
+			escreval("ERRO! O valor da divisão não pode ser igual a 0.");
+			retorna -1;
+		senao
+			retorna valor1 / valor2;
+		fimSe
+	outroCaso
+		escreval("ERRO! Operador inválido.");
+		retorna -1;
+	fimEscolha
+fimFuncao
+
+// Função verificaPar:
+// Objetivo: Verificar se um número é par ou ímpar.
+// Parâmetros: resultado (um número inteiro a ser verificado).
+// Retorno: "PAR" se o número for par, "IMPAR" se for ímpar.
+funcao texto verificaPar(inteiro resultado)
+	se (resultado % 2 == 0) entao
+		retorna "PAR";
+	senao
+		retorna "IMPAR";
+	fimSe
+fimFuncao
+
+// Procedimento escreverResultado:
+// Objetivo: Exibir o resultado da operação realizada e indicar se é par ou ímpar.
+// Parâmetros: valor (um array com os valores de entrada), operador (um array com os operadores), primeiroResultado (o resultado parcial da primeira operação), segundoResultado (o resultado final).
+// Retorno: Não há retorno, apenas exibição do resultado.
+procedimento escreverResultado(inteiro valor[], caracter operador[], real primeiroResultado, real segundoResultado)
+	se ((primeiroResultado != -1) e (segundoResultado != -1)) entao
+		escreval("----------------------------------------");
+		escreval(valor[0] + " " + operador[0] + " " + valor[1] + " " + operador[1] + " " + valor[2] + " = " +  segundoResultado);
+		escreval("O resultado é : ", verificaPar(segundoResultado));
+		escreval("----------------------------------------");
+	senao
+		escreval("Erro nos valores ou operadores inseridos. Por favor, tente novamente.");
+	fimSe
+fimProcedimento

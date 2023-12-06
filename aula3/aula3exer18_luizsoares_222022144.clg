@@ -1,33 +1,28 @@
-algoritmo aula3exer18;
+algoritmo SomatorioDados;
 // Síntese
-//  Objetivo:	Converter o nome em minúsculas e estimar o número aproximado de dias vividos. Vale ressaltar 
-//				que este algoritmo conta apenas anos inteiros, sem considerar anos bisextos.
-//  Entrada :	um inteiro correspodente ao ano de nascimento, um inteiro de ano atual e uma string de nome
-//  Saída   :	o nome em minusculo e os dias vividos
+//  Objetivo:  
+//  Entrada :
+//  Saída   :
 
 
 principal
-	// Declarações
-	inteiro anoNascimento, anoAtual, diasVividos;
-	texto   nome, nomeMinusculo;
+ALGORITMO 
+real dados[70];
+real soma;
+inteiro contador;
 
-	// Instruções
-	escreva("Digite o seu nome: ");
-	leia(nome);
+soma = 0;
 
-	faca
-	escreva("Digite o seu ano de nascimento : ");
-	leia(anoNascimento);
-	escreva("Digite o ano atual : ");
-	leia(anoAtual);
-	enquanto ((anoNascimento > anoAtual) e (anoNascimento > 0) e (anoAtual > 0)); // estrutura do-while que permite somente ano válido
+PARA i DE 1 ATÉ 70 FAÇA
+    ESCREVA "Digite o valor ", i, ": "
+    LEIA dados[i]
+    soma <- soma + dados[i]
+FIM PARA
 
+ESCREVA "O somatório dos valores é: ", soma
 
-	diasVividos = (anoAtual - anoNascimento) * 365;
-	nomeMinusculo = minusculo(nome);
-
-	escreval(nomeMinusculo);
-	escreval("Você viveu " + diasVividos + " dias. ");
-	
+FIM ALGORITMO
 
 fimPrincipal
+
+funcao inteiro (dados[])

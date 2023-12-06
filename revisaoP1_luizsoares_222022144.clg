@@ -1,0 +1,152 @@
+algoritmo votacao;
+// Síntese
+//  Objetivo:	Contagem de votos em três categorias (0, 1 e 2) e o número de votos inválidos.
+//  Entrada :	A quantidade de estados, quantidade de participantes por estado, votos individuais de cada participante
+//  Saída   :	Resultados da contagem de votos e votos inválidos
+
+principal
+	// Declarações
+	inteiro opcao[3], invalidos, totalEstados, totalParticipantes, contador;
+	caracter voto;
+
+	inteiro minimo, estados;
+	estados = 27;	// CONSTANTE
+	minimo = 2; 	// CONSTANTE
+
+	invalidos = 0;
+	inicializarVotos(opcao);
+
+	// Instruções
+	escreva("Digite a quantidade de estados participantes (minimo " + minimo + " e máximo " + estados +  "): ");
+	totalEstados = lerEstados(estados,minimo);
+
+	para (contador de 1 ate totalEstados passo 1) faca
+		limpaTela();
+		escreva("Digite a quantidade de participantes do estado " + contador + " : ");
+		totalParticipantes = lerParticipantes(minimo);
+
+		para (contador de 1 ate totalParticipantes passo 1) faca
+			limpaTela();
+			
+			escreval("VOTO DA PESSOA ", contador);
+			opcoesDeVoto();
+			faca
+				escreva("VOTO : ");
+				leiaCaracter(voto);
+				votacao(opcao, invalidos, voto);
+			enquanto(validarOpcao(voto));
+			
+		fimPara
+	fimPara
+
+
+	mostrarResultado(opcao, invalidos);
+
+fimPrincipal
+
+
+// =======================================
+//			SUB-ALGORITMOS
+// =======================================
+
+// Função: mostrarResultado
+//  Objetivo: Exibir os resultados de uma contagem de votos em três categorias (0, 1 e 2) e o número de votos inválidos.
+//  Parâmetros : Vetor de inteiros opcao[3], inteiro invalidos
+//  Saída   : Resultado em formato tabular com a quantidade de votos de cada categoria e votos inválidos
+procedimento mostrarResultado(inteiro opcao[], inteiro invalidos)
+	escreval("OPÇÃO    		QUANTIDADES");
+	escreval("0        		", opcao[0]);
+	escreval("1        		", opcao[1]);
+	escreval("2        		", opcao[2]);
+	escreval("Inválidos		", invalidos);
+fimProcedimento
+
+// Função: opcoesDeVoto
+//  Objetivo: Exibir as opções de voto para os participantes.
+//  Parâmetros : Nenhum
+//  Saída   : Opções de voto
+procedimento opcoesDeVoto()
+	escreval("ESCOLHA UMA DAS OPÇÕES : ");
+	escreval("0 - Fazer eleições para presidente novamente;");
+	escreval("1 - Manter como está;");
+	escreval("2 - Punir a presidente condenada.");
+fimProcedimento
+
+// Função: votacao
+//  Objetivo: Contabilizar o voto do participante nas categorias 0, 1 ou 2, ou marcá-lo como inválido.
+//  Parâmetros : Vetor de inteiros opcao[3], inteiro invalidos passado POR REFÊRENCIA, caracter voto
+//  Saída   : Voto contabilizado nas categorias ou marcado como inválido
+procedimento votacao(inteiro opcao[], ref inteiro invalidos, caracter voto)
+
+	escolha (voto)
+	caso '0'
+		opcao[0] = opcao[0] + 1;
+		interrompa;
+	caso '1'
+		opcao[1] = opcao[1] + 1;
+		interrompa;
+	caso '2'
+		opcao[2] = opcao[2] + 1;
+		interrompa;
+	outroCaso
+		invalidos = invalidos + 1;
+		interrompa;
+	fimEscolha
+
+fimProcedimento
+
+// Função: inicializarVotos
+//  Objetivo: Inicializar o vetor de contagem de votos.
+//  Parâmetros : Vetor de inteiros opcao[3]
+//  Saída   : Vetor opcao[3] inicializado com zeros
+procedimento inicializarVotos(inteiro opcao[])
+	inteiro contador;
+
+	para (contador de 0 ate 2 passo 1) faca
+		opcao[contador] = 0;
+	fimPara
+
+fimProcedimento
+
+// Função: validarOpcao
+//  Objetivo: Validar se o voto do participante está entre uma das opções (0, 1, 2).
+//  Parâmetros : Um caracter correspondente ao valor do voto
+//  Saída   : Falso para válido, verdadeiro para não válido
+funcao logico validarOpcao(caracter opcao)
+	se ((opcao == '0') ou (opcao == '1') ou (opcao == '2')) entao
+		retorna falso;
+	senao
+		escreval("VOTO NÃO REGISTRADO !!! VALOR INVÁLIDO.");
+		retorna verdadeiro;
+	fimSe
+fimFuncao
+
+// Função: lerEstados
+//  Objetivo: Ler o total de estados, não podendo ser maior que a constante estados e menor que 1.
+//  Parâmetros : Inteiro da constante de estados e minimo
+//  Saída   : Um valor de totalEstados válido
+funcao inteiro lerEstados (inteiro estados, inteiro minimo)
+	inteiro totalEstados;
+
+	leia(totalEstados);
+	enquanto ((totalEstados > estados) ou (totalEstados < minimo)) faca
+		escreva("Quantidade " + totalEstados + " inválida. Digite um valor entre " + minimo + " e " + estados +  " : ");
+		leia(totalEstados);
+	fimEnquanto
+
+	retorna totalEstados;
+fimFuncao
+
+// Função: lerParticipantes
+//  Objetivo: Ler o total de participantes, não podendo ser menor que a constante minimo.
+//  Parâmetros : Inteiro da constante de minimo
+//  Saída   : Um valor de participantes válido
+funcao inteiro lerParticipantes (inteiro minimo)
+	inteiro participante;
+	leia(participante);
+	enquanto ((participante < minimo)) faca
+		escreval("Quantidade " + participante + "inválida. Digite um valor minimo (" + minimo + ").");
+		leia(participante);
+	fimEnquanto
+	retorna participante;
+fimFuncao

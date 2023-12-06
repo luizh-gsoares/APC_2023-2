@@ -1,12 +1,20 @@
+<<<<<<< Updated upstream
 algoritmo semNome;
 // Síntese
 //  Objetivo:
 //  Entrada :
 //  Saída   :
+=======
+algoritmo salarioFuncionarios;
+// Objetivo: Cadastrar matrículas de funcionários sem duplicatas, calcular o menor e o maior salário e exibir os resultados.
+// Entrada: Matrículas e salários de funcionários.
+// Saída: Menor salário, maior salário e lista de matrículas com salários correspondentes.
+>>>>>>> Stashed changes
 
 
 principal
 	// Declarações
+<<<<<<< Updated upstream
 	inteiro tamanhoTotal, matricula, contador;
 	inteiro empregado[100], meses[100];
 	contador = 0;
@@ -83,3 +91,133 @@ procedimento ordenarCadastros(inteiro matricula[], real salario[], inteiro funci
 	fimPara
 fimProcedimento
 
+=======
+	inteiro nroFuncionarios, contador;
+	inteiro matricula[100];
+	real salario[100];
+	real menorSalario, maiorSalario;
+	nroFuncionarios = 100;	// CONSTANTE
+
+	para (contador de 0 ate (nroFuncionarios - 1) passo 1) faca
+		matricula[contador] = lerMatricula(matricula, contador);
+		salario[contador] = lerSalario(contador);
+	fimPara
+
+	menorSalario = definirMenorSalario(salario, nroFuncionarios);
+	maiorSalario = definirMaiorSalario(salario, nroFuncionarios);
+
+	escreverResultado(salario,matricula,nroFuncionarios);
+	
+	escreval("MENOR SALÁRIO : R$ " + menorSalario);
+	escreval("MAIOR SALÁRIO : R$ " + maiorSalario);
+fimPrincipal
+
+
+// Subalgoritmo escreverResultado:
+// Objetivo: Exibir as matrículas dos funcionários e seus salários.
+// Parâmetros: salario (um array de números reais contendo os salários dos funcionários), matricula (um array de números inteiros contendo as matrículas dos funcionários), nroFuncionarios (um número inteiro indicando o número de funcionários).
+// Retorno: Não há retorno, apenas exibição dos resultados.
+procedimento escreverResultado(real salario[], inteiro matricula[], inteiro nroFuncionarios)
+	inteiro contador;
+	limpaTela();
+	escreval("------------------------------------------");
+	escreval("MATRICULA		SALÁRIO");
+	escreval("------------------------------------------");
+	para (contador de 0 ate (nroFuncionarios - 1) passo 1) faca
+		escreval(matricula[contador] + "			R$ " + salario[contador]);
+	fimPara
+	escreval("------------------------------------------");
+fimProcedimento
+
+
+// Função definirMenorSalario:
+// Objetivo: Encontrar o menor salário entre um conjunto de salários.
+// Parâmetros: salario (um array de números reais contendo os salários dos funcionários), nroFuncionarios (um número inteiro indicando o número de funcionários).
+// Retorno: O menor salário encontrado.
+funcao real definirMenorSalario (real salario[], inteiro nroFuncionarios)
+	real menorSalario;
+	inteiro contador;
+	menorSalario = 100000000;
+
+	para (contador de 0 ate (nroFuncionarios - 1) passo 1) faca
+		se (salario[contador] < menorSalario) entao
+			menorSalario = salario[contador];
+		fimSe
+	fimPara
+
+	retorna menorSalario;
+fimFuncao
+
+
+// Função definirMaiorSalario:
+// Objetivo: Encontrar o maior salário entre um conjunto de salários.
+// Parâmetros: salario (um array de números reais contendo os salários dos funcionários), nroFuncionarios (um número inteiro indicando o número de funcionários).
+// Retorno: O maior salário encontrado.
+funcao real definirMaiorSalario (real salario[], inteiro nroFuncionarios)
+	real maiorSalario;
+	inteiro contador;
+	maiorSalario = -50;
+
+	para (contador de 0 ate (nroFuncionarios - 1) passo 1) faca
+		se (salario[contador] > maiorSalario) entao
+			maiorSalario = salario[contador];
+		fimSe
+	fimPara
+
+	retorna maiorSalario;
+fimFuncao
+
+
+// Função lerSalario:
+// Objetivo: Ler o salário de um funcionário da entrada padrão.
+// Parâmetros: contador (um número inteiro que representa a posição do funcionário).
+// Retorno: O salário lido.
+funcao real lerSalario(inteiro contador)
+	inteiro valorDigitado;
+	escreva("Digite o salário do funcionário ", contador + 1, ": ");
+	leia(valorDigitado);
+	enquanto (valorDigitado < 0) faca
+		escreval("Valor inválido!!! Digite novamente.");
+		escreva("Digite o salário do funcionário ", contador + 1, ": ");
+		leia(valorDigitado);
+	fimEnquanto
+	retorna valorDigitado;
+fimFuncao
+
+
+// Função lerMatricula:
+// Objetivo: Ler a matrícula de um funcionário da entrada padrão e garantir que não seja duplicada.
+// Parâmetros: matricula (um array de números inteiros contendo as matrículas já cadastradas), contador (um número inteiro que representa a posição do funcionário).
+// Retorno: A matrícula lida e validada sem duplicatas.
+funcao inteiro lerMatricula(inteiro matricula[], inteiro contador)
+	inteiro valorDigitado;
+	escreva("Digite a matrícula do funcionário ", contador + 1, ": ");
+	leia(valorDigitado);
+	enquanto (existeMatricula(valorDigitado, matricula, contador)) faca
+		escreva("Matrícula já cadastrada. Digite novamente: ");
+		leia(valorDigitado);
+	fimEnquanto
+
+	retorna valorDigitado;
+fimFuncao
+
+
+
+// Função existeMatricula:
+// Objetivo: Verificar se uma matrícula já existe no conjunto de matrículas cadastradas.
+// Parâmetros: valorDigitado (um número inteiro representando a matrícula a ser verificada), matricula (um array de números inteiros contendo as matrículas já cadastradas), contador (um número inteiro que representa o número de matrículas cadastradas).
+// Retorno: Verdadeiro se a matrícula existe, falso caso contrário.
+funcao logico existeMatricula(inteiro valorDigitado, inteiro matricula[], inteiro contador)
+	inteiro i;
+	i = 0;
+
+	enquanto(i < contador) faca
+		se (matricula[i] == valorDigitado) entao
+			retorna verdadeiro;
+		fimSe
+		i = i + 1;
+	fimEnquanto
+
+	retorna falso;
+fimFuncao
+>>>>>>> Stashed changes

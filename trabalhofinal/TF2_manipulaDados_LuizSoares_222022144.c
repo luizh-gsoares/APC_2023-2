@@ -19,6 +19,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <ctype.h>
 
 #define MAXIMO 5
 #define MINIMO 5
@@ -57,17 +58,12 @@ void lerNomeCompleto(char *nomeCompleto);
 void lerSiglaEscola(char *siglaEscola);
 void lerModalidadeCurso(char *modalidadeCurso);
 
-<<<<<<< Updated upstream
-// ========== INICIO LEITURA ==========
-
-// Função       : lerCic
-// Objetivo     : Ler o CIC do curso
-// Parâmetros   : Nenhum
-// Saída        : CIC do curso
-int lerCic()
-=======
 // Protótipos das funções de cadastro
 curso cadastrarCurso(curso *cursos, int *cont);
+
+// Protótipos das funções de edição
+void editarCurso(curso *cursos, int cont);
+int verificaPosicaoCic(int cic, curso *cursos);
 
 // Protótipos das funções de listagem
 void listarCursos(curso *cursos, int cont);
@@ -80,7 +76,6 @@ char *verificaModalidadeCurso(char modalidadeCurso);
 // ========== MAIN ==========
 // ==========================
 int main()
->>>>>>> Stashed changes
 {
     setlocale(LC_ALL, "pt_BR.UTF-8");
     curso cursos[MAXCURSOS]; // Array de cursos
@@ -91,6 +86,7 @@ int main()
 
     do
     {
+        limpaTela();
         menu();
         scanf("%d", &opcao);
 
@@ -105,8 +101,35 @@ int main()
                 cont++;
             } while (continuar());
             break;
+        case 2:
+            limparBuffer();
+
+            if (verificaContadorZero(cont))
+                editarCurso(cursos, cont);
+            else
+                printf("Nao ha cursos cadastrados!\n");
+
+            pausar();
+            break;
         case 3:
-            listarCursos(cursos, cont);
+            limparBuffer();
+
+            if (verificaContadorZero(cont))
+                listarCursos(cursos, cont);
+            else
+                printf("Nao ha cursos cadastrados!\n");
+
+            pausar();
+            break;
+        case 4:
+            limparBuffer();
+
+            if (verificaContadorZero(cont))
+                pesquisarCursoModalidade(cursos, cont);
+            else
+                printf("Nao ha cursos cadastrados!\n");
+
+            pausar();
             break;
         case 0:
             printf("Saindo...\n");
@@ -120,16 +143,293 @@ int main()
     return 0;
 }
 
-<<<<<<< Updated upstream
-// Função       : lerNomeCompleto
-// Objetivo     : Ler o nome completo do curso
-// Parâmetros   : Nenhum
-// Saída        : Nome completo do curso
-char* lerNomeCompleto()
-=======
 // ====================================
 // ========== SUBALGORITMOS  ==========
 // ====================================
+
+// ========== INICIO CADASTRO ==========
+
+// Função: cadastrarCurso
+// Objetivo: Cadastrar um curso
+// Parâmetros: Array de cursos e contador de cursos cadastrados
+// Saída: Curso cadastrado
+curso cadastrarCurso(curso *cursos, int *cont)
+{
+    curso novoCurso; // Novo curso a ser cadastrado
+
+    limpaTela();
+
+    printf("=======================================\n");
+    printf("========== CADASTRO DE CURSO ==========\n");
+    printf("=======================================\n");
+
+    // CIC
+    printf("Digite o CIC do curso (Valor acima de %d): ", MINCIC);
+    lerCic(&novoCurso.cic, cursos, *cont);
+
+    // NOME COMPLETO
+    printf("Digite o nome completo do curso (min %d max %d caracteres): ", MINIMO, MAXNOME);
+    lerNomeCompleto(novoCurso.nomeCompleto);
+
+    // SIGLA DA ESCOLA
+    printf("Digite a sigla da escola (max %d caracteres): ", MAXIMO);
+    lerSiglaEscola(novoCurso.siglaEscola);
+
+    // MODALIDADE DO CURSO
+    printf("Digite a modalidade do curso (P - Presencial, S - Semipresencial, D - Distância):");
+    lerModalidadeCurso(&novoCurso.modalidadeCurso);
+
+    return novoCurso;
+}
+// ============ FIM CADASTRO =============
+
+// ========== INICIO EDITAR ==========
+// Função: editarCurso
+// Objetivo: Editar um curso
+// Parâmetros: Array de cursos e contador de cursos cadastrados
+// Saída: Nenhuma
+void editarCurso(curso *cursos, int cont)
+{
+    int cic;       // CIC do curso a ser editado
+    int posicao;   // Posição do curso no array
+    int opcao = 1; // Opção do menu
+
+    // Exibir os cursos cadastrados
+    limpaTela();
+    exibirCursosCrescente(cursos, cont);
+    pausar();
+
+    // Ler o CIC do curso a ser editado
+    printf("Digite o CIC do curso a ser editado ou 0 para voltar: ");
+    scanf("%d", &cic);
+    posicao = verificaPosicaoCic(cic, cursos);
+
+    if (posicao != -1 && cic != 0)
+    {
+        // Menu de opções
+        limpaTela();
+        printf("=======================================\n");
+        printf("Curso encontrado!\n");
+        printf("CIC:\t%d\n", cursos[posicao].cic);
+        printf("Nome completo:\t%s\n", cursos[posicao].nomeCompleto);
+        printf("Sigla da escola:\t%s\n", cursos[posicao].siglaEscola);
+        printf("Modalidade do curso:\t%s\n", verificaModalidadeCurso(cursos[posicao].modalidadeCurso));
+        printf("=======================================\n");
+
+        menuEditarCurso();
+        scanf("%d", &opcao);
+
+        switch (opcao)
+        {
+        case 1:
+            printf("Digite o novo nome completo do curso: ");
+            lerNomeCompleto(cursos[posicao].nomeCompleto);
+            break;
+
+        case 2:
+            printf("Digite a nova sigla da escola: ");
+            lerSiglaEscola(cursos[posicao].siglaEscola);
+            break;
+
+        case 3:
+            printf("Digite a nova modalidade do curso: ");
+            lerModalidadeCurso(&cursos[posicao].modalidadeCurso);
+            break;
+
+        case 4:
+            printf("Você tem certeza que deseja excluir este registro? (S/N): ");
+            char opcao;
+            scanf(" %c", &opcao);
+
+            if (opcao == 'S' || opcao == 's')
+            {
+                printf("Excluindo curso...\n");
+                sleep(1);
+
+                // Excluir o curso
+                cursos[posicao].cic = 0;
+                cursos[posicao].nomeCompleto[0] = '\0';
+                cursos[posicao].siglaEscola[0] = '\0';
+                cursos[posicao].modalidadeCurso = '\0';
+
+                // Diminuir o contador de cursos cadastrados
+                cont--;
+                break;
+            }
+            else
+            {
+                printf("Voltando...\n");
+                sleep(1);
+                break;
+            }
+        case 0:
+            printf("Voltando...\n");
+            sleep(1);
+            break;
+
+        default:
+            printf("Opcao invalida! Nenhuma alteração será realizada.\n");
+            printf("Voltando...\n");
+            sleep(2);
+            break;
+        }
+    }
+    else
+    {
+        printf("Curso nao encontrado ou foi pressionado 0 para voltar! Voltando para o menu anterior...\n");
+        sleep(2);
+    }
+}
+
+// Função: verificaPosicaoCic
+// Objetivo: Verificar a posição do curso no array
+// Parâmetros: CIC do curso e array de cursos
+// Saída: Posição do curso no array
+int verificaPosicaoCic(int cic, curso *cursos)
+{
+    for (int i = 0; i < MAXCURSOS - 1; i++)
+    {
+        if (cursos[i].cic == cic)
+        {
+            return i;
+        }
+    }
+
+    printf("CIC do curso nao encontrado!\n");
+    return -1;
+}
+
+// =========== FIM EDITAR =============
+
+// ========== INICIO PESQUISAR ==========
+// Função: pesquisarCurso
+// Objetivo: Pesquisar um curso por modalidade
+// Parâmetros: Array de cursos e contador de cursos cadastrados
+// Saída: Nenhuma
+void pesquisarCursoModalidade(curso *cursos, int cont)
+{
+    char modalidade; // Modalidade do curso
+    int encontrou = 0;
+
+    printf("Digite a modalidade do curso (P - Presencial, S - Semipresencial, D - Distância): ");
+    lerModalidadeCurso(&modalidade);
+
+    // Exibir os cursos cadastrados
+    limpaTela();
+
+    printf("CIC\t\tNome Completo\t\tSigla da Escola\t\tModalidade do Curso\n");
+    for (int i = 0; i < cont; i++)
+    {
+        if (cursos[i].modalidadeCurso == modalidade)
+        {
+            printf("%d\t\t%s\t\t%s\t\t%s\n", cursos[i].cic, cursos[i].nomeCompleto, cursos[i].siglaEscola, verificaModalidadeCurso(cursos[i].modalidadeCurso));
+            encontrou = 1;
+        }
+    }
+
+    if (!encontrou)
+    {
+        printf("Nenhum curso encontrado!\n");
+    }
+}
+
+// =========== FIM PESQUISAR =============
+
+// ========== INICIO LISTAR ===========
+
+// Função: verificaModalidadeCurso
+// Objetivo: Verificar a modalidade do curso (exibir como texto os valores de P, S e D)
+// Parâmetros: Modalidade do curso
+// Saída: Modalidade do curso
+char *verificaModalidadeCurso(char modalidadeCurso)
+{
+    if (modalidadeCurso == 'P')
+    {
+        return "Presencial";
+    }
+    else if (modalidadeCurso == 'S')
+    {
+        return "Semipresencial";
+    }
+    else if (modalidadeCurso == 'D')
+    {
+        return "Distância";
+    }
+    else
+    {
+        return "Modalidade inválida";
+    }
+}
+
+// TODO : Arrumar exibição em tabela
+// Função: exibirTabela
+// Objetivo: Exibir os cursos em forma de tabela
+// Parâmetros: Array de cursos e contador de cursos cadastrados
+// Saída: Nenhuma
+void exibirTabela(curso *cursos, int cont)
+{
+    printf("CIC\t\tNome Completo\t\tSigla da Escola\t\tModalidade do Curso\n");
+    for (int i = 0; i < cont; i++)
+        printf("%d\t\t%s\t\t%s\t\t%s\n", cursos[i].cic, cursos[i].nomeCompleto, cursos[i].siglaEscola, verificaModalidadeCurso(cursos[i].modalidadeCurso));
+}
+
+// Função: listarCursos
+// Objetivo: Listar os cursos
+// Parâmetros: Nenhum
+// Saída: Nenhuma
+void listarCursos(curso *cursos, int cont)
+{
+    int opcao;
+
+    do
+    {
+        menuListarCursos();
+        scanf("%d", &opcao);
+
+        switch (opcao)
+        {
+        case 1:
+            limpaTela();
+            exibirCursosCrescente(cursos, cont);
+            limparBuffer();
+            pausar();
+            break;
+
+        case 2:
+            limpaTela();
+            exibirCursosDecrescente(cursos, cont);
+            limparBuffer();
+            pausar();
+            break;
+
+        case 3:
+            limpaTela();
+            ordenarNomeCrescente(cursos, cont);
+            limparBuffer();
+            pausar();
+            break;
+
+        case 4:
+            limpaTela();
+            ordenarNomeDecrescente(cursos, cont);
+            limparBuffer();
+            pausar();
+            break;
+
+        case 0:
+            printf("Voltando...\n");
+            sleep(1);
+            break;
+
+        default:
+            printf("Opcao invalida!\n");
+            limparBuffer();
+            break;
+        }
+    } while (opcao != 0);
+}
+
+// ============ FIM LISTAR =============
 
 // ============ INICIO LER ============
 
@@ -165,7 +465,6 @@ void lerNomeCompleto(char *nomeCompleto)
 // Parâmetros: Ponteiro para armazenar a sigla da escola
 // Saída: Nenhuma
 void lerSiglaEscola(char *siglaEscola)
->>>>>>> Stashed changes
 {
     do
     {
@@ -222,16 +521,6 @@ int validaCic(int cic, curso *cursos, int cont)
     return 0;
 }
 
-<<<<<<< Updated upstream
-// Função       : lerSiglaEscola
-// Objetivo     : Ler a sigla da escola
-// Parâmetros   : Nenhum
-// Saída        : Sigla da escola
-char* lerSiglaEscola()
-{
-    char siglaEscola[MAXIMO];    // Sigla da escola
-    do
-=======
 // Função       : validaNomeCompleto
 // Objetivo     : Validar o nome completo do curso
 // Parâmetros   : Nome completo do curso
@@ -240,7 +529,6 @@ int validaNomeCompleto(char *nomeCompleto)
 {
 
     if ((strlen(nomeCompleto) - 1) > MAXNOME)
->>>>>>> Stashed changes
     {
         printf("Nome completo do curso excede a quantidade permitida! Digite novamente:");
         return 1;
@@ -260,18 +548,6 @@ int validaNomeCompleto(char *nomeCompleto)
     return 0;
 }
 
-<<<<<<< Updated upstream
-
-// Função       : lerModalidadeCurso
-// Objetivo     : Ler a modalidade do curso
-// Parâmetros   : Nenhum
-// Saída        : Modalidade do curso
-char lerModalidadeCurso()
-{
-    char modalidadeCurso;    // Modalidade do curso
-
-    do
-=======
 // Função       : validaSiglaEscola
 // Objetivo     : Validar a sigla da escola
 // Parâmetros   : Sigla da escola
@@ -291,7 +567,6 @@ int validaSiglaEscola(char *siglaEscola)
 
     // Valida se existe algum espaço em branco na sigla da escola
     for (int i = 0; i < strlen(siglaEscola) - 1; i++)
->>>>>>> Stashed changes
     {
         if (siglaEscola[i] == ' ')
         {
@@ -302,38 +577,6 @@ int validaSiglaEscola(char *siglaEscola)
 
     // Se chegar ao final da função, a sigla da escola é válida
     return 0;
-}
-
-// ========== FIM LEITURA ==========
-
-// ========== INICIO VALIDAÇÃO ==========
-
-// Função       : validaCic
-// Objetivo     : Validar o CIC do curso
-// Parâmetros   : CIC do curso
-// Saída        : 0 para válido e 1 para inválido
-int validaCic(int cic)
-{
-    return (cic < MINCIC) ? 1 : 0;
-}
-
-// Função       : validaNomeCompleto
-// Objetivo     : Validar o nome completo do curso
-// Parâmetros   : Nome completo do curso
-// Saída        : 0 para válido e 1 para inválido
-int validaNomeCompleto(char *nomeCompleto)
-{
-    return (strlen(nomeCompleto) < MINIMO || strlen(nomeCompleto) > MAXNOME || nomeCompleto[0] == '\n') ? 1 : 0;
-}
-
-// Função       : validaSiglaEscola
-// Objetivo     : Validar a sigla da escola
-// Parâmetros   : Sigla da escola
-// Saída        : 0 para válido e 1 para inválido
-int validaSiglaEscola(char *siglaEscola)
-{
-
-    return (strlen(siglaEscola) > MAXIMO || siglaEscola[0] == '\n') ? 1 : 0;
 }
 
 // Função       : validaModalidadeCurso
@@ -351,58 +594,19 @@ int validaModalidadeCurso(char modalidadeCurso)
     return 0;
 }
 
-<<<<<<< Updated upstream
-// ========== FIM VALIDAÇÃO ==========
+// Função       : verificaContadorZero
+// Objetivo     : Verificar o contador se não há cursos cadastrados
+// Parâmetros   : Contador de cursos cadastrados
+// Saída        : 0 sem cadastro e 1 com cadastro
+int verificaContadorZero(int cont)
+{
+    return (cont == 0) ? 0 : 1;
+}
 
-
-// ========== INICIO CADASTRO ==========
-
-// Função       : cadastrarCurso
-// Objetivo     : Cadastrar um curso
-// Parâmetros   : Nenhum
-// Saída        : Nenhuma
-curso cadastrarCurso()
-=======
 // ============ FIM VALIDA =============
 
-// ========== INICIO CADASTRO ==========
+// ============= ORDENAR ===============
 
-// Função: cadastrarCurso
-// Objetivo: Cadastrar um curso
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Curso cadastrado
-curso cadastrarCurso(curso *cursos, int *cont)
->>>>>>> Stashed changes
-{
-    curso novoCurso; // Novo curso a ser cadastrado
-
-    limpaTela();
-
-    printf("=======================================\n");
-    printf("========== CADASTRO DE CURSO ==========\n");
-    printf("=======================================\n");
-
-    // CIC
-    printf("Digite o CIC do curso (Valor acima de %d): ", MINCIC);
-    lerCic(&novoCurso.cic, cursos, *cont);
-
-    // NOME COMPLETO
-    printf("Digite o nome completo do curso (max %d caracteres): ", MAXNOME);
-    lerNomeCompleto(novoCurso.nomeCompleto);
-
-    // SIGLA DA ESCOLA
-    printf("Digite a sigla da escola (max %d caracteres): ", MAXIMO);
-    lerSiglaEscola(novoCurso.siglaEscola);
-
-    // MODALIDADE DO CURSO
-    printf("Digite a modalidade do curso (P - Presencial, S - Semipresencial, D - Distância):");
-    lerModalidadeCurso(&novoCurso.modalidadeCurso);
-
-    return novoCurso;
-}
-// ============ FIM CADASTRO =============
-
-// ========== INICIO LISTAR ===========
 // Função: exibirCursosCrecente
 // Objetivo: Exibir os cursos em ordem crescente
 // Parâmetros: Array de cursos e contador de cursos cadastrados
@@ -425,7 +629,7 @@ void exibirCursosCrescente(curso *cursos, int cont)
     }
 
     // Exibir os cursos ordenados
-    printf("Cursos em ordem crescente:\n");
+    printf("Cursos por CIC ASC:\n");
     exibirTabela(cursos, cont);
 }
 
@@ -451,117 +655,63 @@ void exibirCursosDecrescente(curso *cursos, int cont)
     }
 
     // Exibir os cursos ordenados
-    printf("Cursos em ordem decrescente:\n");
+    printf("Cursos por CIC DESC:\n");
     exibirTabela(cursos, cont);
 }
 
-// Função: verificaModalidadeCurso
-// Objetivo: Verificar a modalidade do curso (exibir como texto os valores de P, S e D)
-// Parâmetros: Modalidade do curso
-// Saída: Modalidade do curso
-char *verificaModalidadeCurso(char modalidadeCurso)
-{
-<<<<<<< Updated upstream
-    curso cursos[MAXCURSOS];            // Array de cursos
-    int opcao;                          // Opção do menu
-    int numCurso = 0;                   // Número de cursos cadastrados
-=======
-    if (modalidadeCurso == 'P')
-    {
-        return "Presencial";
-    }
-    else if (modalidadeCurso == 'S')
-    {
-        return "Semipresencial";
-    }
-    else if (modalidadeCurso == 'D')
-    {
-        return "Distância";
-    }
-    else
-    {
-        return "Modalidade inválida";
-    }
-}
-
-// TODO : Arrumar exibição em tabela
-// Função: exibirTabela
-// Objetivo: Exibir os cursos em forma de tabela
+// Função: ordenarCursosCrecente
+// Objetivo: Ordenar os cursos em ordem crescente (A-Z)
 // Parâmetros: Array de cursos e contador de cursos cadastrados
 // Saída: Nenhuma
-void exibirTabela(curso *cursos, int cont)
+void ordenarNomeCrescente(curso *cursos, int cont)
 {
-    printf("CIC\t\tNome Completo\t\t\tSigla da Escola\t\tModalidade do Curso\n");
-    for (int i = 0; i < cont; i++)
-        printf("%d\t\t%s\t%s\t\t%s\n", cursos[i].cic, cursos[i].nomeCompleto, cursos[i].siglaEscola, verificaModalidadeCurso(cursos[i].modalidadeCurso));
-}
-
-// Função: listarCursos
-// Objetivo: Listar os cursos
-// Parâmetros: Nenhum
-// Saída: Nenhuma
-void listarCursos(curso *cursos, int cont)
-{
-    int opcao;
->>>>>>> Stashed changes
-
-    do
+    // Ordenar os cursos em ordem crescente por nome completo (Bubble Sort)
+    for (int i = 0; i < cont - 1; i++)
     {
-        limpaTela();
-        menuListarCursos();
-        scanf("%d", &opcao);
-
-        switch (opcao)
+        for (int j = 0; j < cont - i - 1; j++)
         {
-        case 1:
-<<<<<<< Updated upstream
-            cursos[numCurso] = cadastrarCurso();
-            numCurso++;
-=======
-            limpaTela();
-            exibirCursosCrescente(cursos, cont);
-            limparBuffer();
-            pausar();
->>>>>>> Stashed changes
-            break;
-
-        case 2:
-            limpaTela();
-            exibirCursosDecrescente(cursos, cont);
-            limparBuffer();
-            pausar();
-            break;
-<<<<<<< Updated upstream
-        case 3:
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
-=======
-
->>>>>>> Stashed changes
-        case 0:
-            printf("Voltando...\n");
-            break;
-
-        default:
-            printf("Opcao invalida!\n");
-            limparBuffer();
-            break;
+            if (strcmp(cursos[j].nomeCompleto, cursos[j + 1].nomeCompleto) > 0)
+            {
+                // Troca de posições
+                curso temp = cursos[j];
+                cursos[j] = cursos[j + 1];
+                cursos[j + 1] = temp;
+            }
         }
-<<<<<<< Updated upstream
-        fflush(stdin);
     }
-    while (opcao != 0);
 
-    return 0;
-}
-=======
-    } while (opcao != 0);
+    // Exibir os cursos ordenados
+    printf("Cursos (A-Z) por Nome ASC:\n");
+    exibirTabela(cursos, cont);
 }
 
-// ============ FIM LISTAR =============
+// Função: ordenarCursosDecrecente
+// Objetivo: Ordenar os cursos em ordem decrescente (Z-A)
+// Parâmetros: Array de cursos e contador de cursos cadastrados
+// Saída: Nenhuma
+void ordenarNomeDecrescente(curso *cursos, int cont)
+{
+    // Ordenar os cursos em ordem decrescente por nome completo (Bubble Sort)
+    for (int i = 0; i < cont - 1; i++)
+    {
+        for (int j = 0; j < cont - i - 1; j++)
+        {
+            if (strcmp(cursos[j].nomeCompleto, cursos[j + 1].nomeCompleto) < 0)
+            {
+                // Troca de posições
+                curso temp = cursos[j];
+                cursos[j] = cursos[j + 1];
+                cursos[j + 1] = temp;
+            }
+        }
+    }
+
+    // Exibir os cursos ordenados
+    printf("Cursos (Z-A) por Nome DESC:\n");
+    exibirTabela(cursos, cont);
+}
+
+// ============ FIM ORDENAR ============
 
 // ========== INICIO SISTEMA ==========
 // Função       : menu
@@ -570,7 +720,6 @@ void listarCursos(curso *cursos, int cont)
 // Saída        : Nenhuma
 void menu()
 {
-    limpaTela();
     printf("========================================\n");
     printf("====== CURSOS PROFISSIONALIZANTES ======\n");
     printf("========================================\n");
@@ -591,13 +740,31 @@ void menu()
 void menuListarCursos()
 {
     limpaTela();
+
     printf("========================================\n");
     printf("========== LISTAR CURSOS ===============\n");
     printf("========================================\n");
 
-    printf("1 - Crescente\n");
-    printf("2 - Decrescente\n");
+    printf("1 - Crescente por CIC\n");
+    printf("2 - Decrescente por CIC\n");
+    printf("3 - Crescente por Nome\n");
+    printf("4 - Decrescente por Nome\n");
     printf("0 - Voltar\n");
+    printf("Digite a opção desejada: ");
+}
+
+// Função       : menuEditarCurso
+// Objetivo     : Mostrar o menu de editar curso
+// Parâmetros   : Nenhum
+// Saída        : Nenhuma
+void menuEditarCurso()
+{
+    printf("Indique o campo a ser editado:\n");
+    printf("1 - Nome do curso.\n");
+    printf("2 - Sigla da escola.\n");
+    printf("3 - Modalidade do curso.\n");
+    printf("4 - Excluir este registro.\n");
+    printf("0 - Voltar.\n");
     printf("Digite a opção desejada: ");
 }
 
@@ -646,16 +813,19 @@ void limparBuffer()
 #endif
 }
 
-// Função       : removerTerminador
-// Objetivo     : Remover o terminador de string
-// Parâmetros   : String
-// Saída        : Nenhuma
-void removerTerminador(char *string)
+// Função: dormir
+// Objetivo: Dormir o sistema por um determinado tempo
+// Parâmetros: Tempo em segundos
+// Saída: Nenhuma
+void dormir(int tempo)
 {
-    if (string[strlen(string) - 1] == '\n')
-    {
-        string[strlen(string) - 1] = '\0';
-    }
+#if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+    sleep(tempo);
+#endif
+
+#if defined(_WIN32) || defined(_WIN64)
+    Sleep(tempo * 1000);
+#endif
 }
 
 // Função       : pausar
@@ -664,8 +834,8 @@ void removerTerminador(char *string)
 // Saída        : Nenhuma
 void pausar()
 {
-    printf("\nPressione qualquer tecla para continuar...");
-    getc(stdin);
+    printf("\nPressione qualquer tecla para continuar...\n");
+    getchar();
 }
 
 // Função       : continuar
@@ -689,4 +859,3 @@ int continuar()
     }
 }
 // ============ FIM SISTEMA ============
->>>>>>> Stashed changes

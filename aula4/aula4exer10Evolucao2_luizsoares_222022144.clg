@@ -1,0 +1,110 @@
+algoritmo populacaoRegiao;
+// Síntese
+//  Objetivo:  Mostrar a maior idade e a porcentagem de mulheres entre 18 e 35 anos que tenham olhos verdes e sejam loiras
+//  Entrada : idade, cor dos olhos, cor dos cabelos, e o sexo
+//  Saída   : porcentagem de mulheres loiras de olho verde entre 18 e 35 anos e maior idade
+
+principal
+	// Declarações
+	inteiro idade, maiorIdade;
+	texto sexo, olhos, cabelos;
+	inteiro contadorFemininoVerdeLoiro, contadorTotal;
+	real porcentagem;
+
+	maiorIdade = -1;
+	contadorFemininoVerdeLoiro = 0;
+	contadorTotal = 0;
+	porcentagem = 0;
+
+	// Instruções
+	faca
+		escreval("Para encerrar o programa, digite -1.");
+		idade = lerIdade();
+		sexo = lerSexo();
+		olhos = lerOlhos();
+		cabelos = lerCabelos();
+
+		se ((comparaTexto(sexo,"feminino") == 0) e ((idade >= 18) e (idade <= 35)) e comparaTexto(olhos,"V") == 0) e (comparaTexto(cabelos,"L") == 0)) entao
+			contadorFemininoVerdeLoiro = contadorFemininoVerdeLoiro + 1;
+		fimSe
+		
+		se (idade > maiorIdade) entao
+			maiorIdade = idade;
+		fimSe
+
+		contadorTotal = contadorTotal + 1;
+		limpaTela();
+	enquanto (idade != -1);   
+
+	se (contadorTotal != 0) entao
+		porcentagem = (contadorFemininoVerdeLoiro / contadorTotal) * 100;
+	fimSe
+
+	escreval("A) A maior idade entre todos os habitantes cadastrados é: ", maiorIdade);
+	escreval("B) A porcentagem de indivíduos do sexo feminino cuja idade está entre 18 e 35 anos, que têm olhos verdes e cabelos loiros é: ", porcentagem::2, " %");
+
+fimPrincipal
+
+
+//Subalgoritmos
+//Objetivo: validar idade
+//Parametros: idade, contador
+//Retorno: idade válida
+funcao  inteiro lerIdade()
+	inteiro idade;
+	escreva("Digite a idade do individuo : ");
+	leia(idade);
+	enquanto ((idade < -1) ou (idade > 120)) faca
+		escreva("Digite uma idade válida entre 0 e 120: ");
+		leia(idade);
+	fimEnquanto
+	se (idade == -1) entao
+		limpaTela();
+		interrompa;
+	fimSe
+	retorna idade;
+fimFuncao
+
+//Objetivo: validar sexo
+//Parametros: sexo, contador
+//Retorno: sexo valido
+funcao  texto lerSexo()
+	texto sexo;
+	escreva("Digite o sexo do individuo (masculino/feminino): ");
+	leia(sexo);
+	enquanto ((comparaTexto(sexo,"masculino") != 0) e (comparaTexto(sexo,"feminino") != 0))faca
+		escreva("Houve um erro. Certifique-se que digitou corretamente a opção e escreva novamente : ");
+		leia(sexo);
+	fimEnquanto
+	retorna sexo;
+fimFuncao
+
+//Objetivo: validar cor dos olhos
+//Parametros: cor dos olhos, contador
+//Retorno: cor dos olhos valida
+funcao  texto lerOlhos()
+	texto olhos;
+	escreva("Digite a cor dos olhos do individuo entre as opções AZUL, VERDE, CASTANHO e PRETO (A/V/C/P): ");
+	leia(olhos);
+	enquanto (comparaTexto(olhos, "A") != 0 e comparaTexto(olhos, "V") != 0 e comparaTexto(olhos, "C") != 0 e comparaTexto(olhos, "P") != 0) faca
+		escreva("Houve um erro. Certifique-se que digitou corretamente a opção e escreva novamente : ");
+		leia(olhos);
+	fimEnquanto
+	retorna olhos;
+fimFuncao
+
+//Objetivo: validar cor do cabelo
+//Parametros: cor do cabelo, contador
+//Retorno: cor do cabelo valida
+funcao  texto lerCabelos()
+	texto cabelos;
+	escreva("Digite a cor dos cabelos do individuo entre as opções LOIROS, CASTANHOS e PRETOS(L/C/P): ");
+	leia(cabelos);
+	enquanto (comparaTexto(cabelos, "L") != 0 e comparaTexto(cabelos, "C") != 0 e comparaTexto(cabelos, "P") != 0) faca
+		escreva("Houve um erro. Certifique-se que digitou corretamente a opção e escreva novamente : ");
+		leia(cabelos);
+	fimEnquanto
+	retorna cabelos;
+fimFuncao
+
+	

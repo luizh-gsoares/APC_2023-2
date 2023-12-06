@@ -1,0 +1,120 @@
+//nome: Rafael Silva Wasconcelos
+//Data da prova: 18/10/2023
+
+algoritmo P1;
+// Síntese
+//  Objetivo: cadastar ate 55 participantes da corrida
+//  Entrada : idade e genero
+//  Saída   : total de corredores cadastrados
+
+
+principal
+	// Declarações
+	inteiro cadastroTotal;
+	inteiro contaCadastro;
+	inteiro idade[55], valorDigitado;
+	caracter genero[55];
+	// Instruções
+	cadastroTotal=55;
+	contaCadastro = 0;
+	faca
+		escreval("Digite a idade do ", contaCadastro+1, " corredor ");
+		escreval("Digite -1 para encerrar o cadastro");
+		leia (valorDigitado);
+		idade[contaCadastro] = validaIdade();
+		se (idade[contaCadastro]!= -1) entao
+			idade[contaCadastro]= validaIdade(idade[contaCadastro]);
+			se	(idade[contaCadastro]!= -1) entao
+				menuGenero(idade[contaCadastro]);
+				escreva("Digite o genero do ", contaCadastro+1, " corredor ");
+				leiaCaracter(genero[contaCadastro]);
+				genero[contaCadastro] = (validaGenero(genero[contaCadastro]));
+			fimSe
+		fimSe
+		contaCadastro = contaCadastro+1;
+	enquanto((contaCadastro < cadastroTotal) e (idade[contaCadastro-1]!=-1));
+	limpaTela();
+	mostraResultadosFinais(contaCadastro);
+
+
+
+
+
+
+
+fimPrincipal
+
+//=======SUBALGORITMOS======
+
+//Objetivo: Validar idade
+//Parametros: idade
+//Retorno: idade valida
+
+funcao inteiro validaIdade(inteiro idade)
+	//Declaraões locais
+
+	//Instruções locais
+	enquanto ((idade<=17) ou ( idade>80) e (idade!=-1)) faca
+		escreva("Erro, digite uma idade maior que 17 ou menor ou igual a 80");
+		leia(idade);
+	fimEnquanto
+
+	limpaTela();
+	retorna idade;
+fimFuncao
+
+//Objetivo: Validar genero
+//Parametros: genero
+//Retorno: genero valido
+
+funcao caracter validaGenero(caracter genero)
+	//Declaracões locais
+
+	//Instruções locais
+	enquanto ((genero!= 'F') e (genero!= 'M')) faca
+		escreva("Erro, digite um genero valido ");
+		leiaCaracter(genero);
+	fimEnquanto
+	limpaTela();
+	retorna genero;
+fimFuncao
+
+//Objetivo: Apresentar menu de opcoes para genero
+//Parametros: idade
+//Retorno: nenhum
+procedimento menuGenero(inteiro idade)
+	//Declaracões locais
+
+	//Instruções locais
+	escreval("Digite 'M' para Masculino");
+	escreval("Digite 'F' para Feminino");
+fimProcedimento
+//Objetivo: Apresentar numero de cadastrados
+//Parametros: conta cadastro
+//Retorno: nenhum
+procedimento mostraResultadosFinais(inteiro contaCadastro)
+
+	//Declaracões locais
+
+	//Instruções locais
+	escreval (contaCadastro," = Corredores Cadastrados");
+fimProcedimento
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

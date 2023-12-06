@@ -57,15 +57,6 @@ void lerNomeCompleto(char *nomeCompleto);
 void lerSiglaEscola(char *siglaEscola);
 void lerModalidadeCurso(char *modalidadeCurso);
 
-<<<<<<< Updated upstream
-// ========== INICIO LEITURA ==========
-
-// Função       : lerCic
-// Objetivo     : Ler o CIC do curso
-// Parâmetros   : Nenhum
-// Saída        : CIC do curso
-int lerCic()
-=======
 // Protótipos das funções de cadastro
 curso cadastrarCurso(curso *cursos, int *cont);
 
@@ -80,7 +71,6 @@ char *verificaModalidadeCurso(char modalidadeCurso);
 // ========== MAIN ==========
 // ==========================
 int main()
->>>>>>> Stashed changes
 {
     setlocale(LC_ALL, "pt_BR.UTF-8");
     curso cursos[MAXCURSOS]; // Array de cursos
@@ -120,13 +110,6 @@ int main()
     return 0;
 }
 
-<<<<<<< Updated upstream
-// Função       : lerNomeCompleto
-// Objetivo     : Ler o nome completo do curso
-// Parâmetros   : Nenhum
-// Saída        : Nome completo do curso
-char* lerNomeCompleto()
-=======
 // ====================================
 // ========== SUBALGORITMOS  ==========
 // ====================================
@@ -165,7 +148,6 @@ void lerNomeCompleto(char *nomeCompleto)
 // Parâmetros: Ponteiro para armazenar a sigla da escola
 // Saída: Nenhuma
 void lerSiglaEscola(char *siglaEscola)
->>>>>>> Stashed changes
 {
     do
     {
@@ -222,16 +204,6 @@ int validaCic(int cic, curso *cursos, int cont)
     return 0;
 }
 
-<<<<<<< Updated upstream
-// Função       : lerSiglaEscola
-// Objetivo     : Ler a sigla da escola
-// Parâmetros   : Nenhum
-// Saída        : Sigla da escola
-char* lerSiglaEscola()
-{
-    char siglaEscola[MAXIMO];    // Sigla da escola
-    do
-=======
 // Função       : validaNomeCompleto
 // Objetivo     : Validar o nome completo do curso
 // Parâmetros   : Nome completo do curso
@@ -240,7 +212,6 @@ int validaNomeCompleto(char *nomeCompleto)
 {
 
     if ((strlen(nomeCompleto) - 1) > MAXNOME)
->>>>>>> Stashed changes
     {
         printf("Nome completo do curso excede a quantidade permitida! Digite novamente:");
         return 1;
@@ -260,18 +231,6 @@ int validaNomeCompleto(char *nomeCompleto)
     return 0;
 }
 
-<<<<<<< Updated upstream
-
-// Função       : lerModalidadeCurso
-// Objetivo     : Ler a modalidade do curso
-// Parâmetros   : Nenhum
-// Saída        : Modalidade do curso
-char lerModalidadeCurso()
-{
-    char modalidadeCurso;    // Modalidade do curso
-
-    do
-=======
 // Função       : validaSiglaEscola
 // Objetivo     : Validar a sigla da escola
 // Parâmetros   : Sigla da escola
@@ -291,7 +250,6 @@ int validaSiglaEscola(char *siglaEscola)
 
     // Valida se existe algum espaço em branco na sigla da escola
     for (int i = 0; i < strlen(siglaEscola) - 1; i++)
->>>>>>> Stashed changes
     {
         if (siglaEscola[i] == ' ')
         {
@@ -302,38 +260,6 @@ int validaSiglaEscola(char *siglaEscola)
 
     // Se chegar ao final da função, a sigla da escola é válida
     return 0;
-}
-
-// ========== FIM LEITURA ==========
-
-// ========== INICIO VALIDAÇÃO ==========
-
-// Função       : validaCic
-// Objetivo     : Validar o CIC do curso
-// Parâmetros   : CIC do curso
-// Saída        : 0 para válido e 1 para inválido
-int validaCic(int cic)
-{
-    return (cic < MINCIC) ? 1 : 0;
-}
-
-// Função       : validaNomeCompleto
-// Objetivo     : Validar o nome completo do curso
-// Parâmetros   : Nome completo do curso
-// Saída        : 0 para válido e 1 para inválido
-int validaNomeCompleto(char *nomeCompleto)
-{
-    return (strlen(nomeCompleto) < MINIMO || strlen(nomeCompleto) > MAXNOME || nomeCompleto[0] == '\n') ? 1 : 0;
-}
-
-// Função       : validaSiglaEscola
-// Objetivo     : Validar a sigla da escola
-// Parâmetros   : Sigla da escola
-// Saída        : 0 para válido e 1 para inválido
-int validaSiglaEscola(char *siglaEscola)
-{
-
-    return (strlen(siglaEscola) > MAXIMO || siglaEscola[0] == '\n') ? 1 : 0;
 }
 
 // Função       : validaModalidadeCurso
@@ -351,18 +277,6 @@ int validaModalidadeCurso(char modalidadeCurso)
     return 0;
 }
 
-<<<<<<< Updated upstream
-// ========== FIM VALIDAÇÃO ==========
-
-
-// ========== INICIO CADASTRO ==========
-
-// Função       : cadastrarCurso
-// Objetivo     : Cadastrar um curso
-// Parâmetros   : Nenhum
-// Saída        : Nenhuma
-curso cadastrarCurso()
-=======
 // ============ FIM VALIDA =============
 
 // ========== INICIO CADASTRO ==========
@@ -372,7 +286,6 @@ curso cadastrarCurso()
 // Parâmetros: Array de cursos e contador de cursos cadastrados
 // Saída: Curso cadastrado
 curso cadastrarCurso(curso *cursos, int *cont)
->>>>>>> Stashed changes
 {
     curso novoCurso; // Novo curso a ser cadastrado
 
@@ -461,11 +374,6 @@ void exibirCursosDecrescente(curso *cursos, int cont)
 // Saída: Modalidade do curso
 char *verificaModalidadeCurso(char modalidadeCurso)
 {
-<<<<<<< Updated upstream
-    curso cursos[MAXCURSOS];            // Array de cursos
-    int opcao;                          // Opção do menu
-    int numCurso = 0;                   // Número de cursos cadastrados
-=======
     if (modalidadeCurso == 'P')
     {
         return "Presencial";
@@ -503,7 +411,6 @@ void exibirTabela(curso *cursos, int cont)
 void listarCursos(curso *cursos, int cont)
 {
     int opcao;
->>>>>>> Stashed changes
 
     do
     {
@@ -514,15 +421,10 @@ void listarCursos(curso *cursos, int cont)
         switch (opcao)
         {
         case 1:
-<<<<<<< Updated upstream
-            cursos[numCurso] = cadastrarCurso();
-            numCurso++;
-=======
             limpaTela();
             exibirCursosCrescente(cursos, cont);
             limparBuffer();
             pausar();
->>>>>>> Stashed changes
             break;
 
         case 2:
@@ -531,16 +433,7 @@ void listarCursos(curso *cursos, int cont)
             limparBuffer();
             pausar();
             break;
-<<<<<<< Updated upstream
-        case 3:
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
-=======
 
->>>>>>> Stashed changes
         case 0:
             printf("Voltando...\n");
             break;
@@ -550,14 +443,6 @@ void listarCursos(curso *cursos, int cont)
             limparBuffer();
             break;
         }
-<<<<<<< Updated upstream
-        fflush(stdin);
-    }
-    while (opcao != 0);
-
-    return 0;
-}
-=======
     } while (opcao != 0);
 }
 
@@ -689,4 +574,3 @@ int continuar()
     }
 }
 // ============ FIM SISTEMA ============
->>>>>>> Stashed changes
