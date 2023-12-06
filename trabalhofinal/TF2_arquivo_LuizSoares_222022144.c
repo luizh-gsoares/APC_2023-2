@@ -20,7 +20,9 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <ctype.h>
+#if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
+#endif
 
 #define MAXIMO 5
 #define MINIMO 5
@@ -44,125 +46,150 @@ void menuListarCursos();
 void limpaTela();
 void limparBuffer();
 void pausar();
-void dormir(int segundos);
 int continuar();
+void dormir(int segundos);
+void localizacao();
 
 // Protótipos das funções de validação
-int validaCic(int cic, curso *cursos, int cont);
+int validaCic(int cic, FILE *arquivo);
 int validaNomeCompleto(char *nomeCompleto);
 int validaSiglaEscola(char *siglaEscola);
 int validaModalidadeCurso(char modalidadeCurso);
 
 // Protótipos das funções de leitura de dados
-void lerCic(int *cic, curso *cursos, int cont);
+void lerCic(int *cic, FILE *arquivo);
 void lerNomeCompleto(char *nomeCompleto);
 void lerSiglaEscola(char *siglaEscola);
 void lerModalidadeCurso(char *modalidadeCurso);
 
 // Protótipos das funções de cadastro
-
-
-// Protótipos das funções de edição
-void editarCurso(curso *cursos, int cont);
-int verificaPosicaoCic(int cic, curso *cursos, int cont);
+curso cadastrarCurso(FILE *arquivo);
 
 // Protótipos das funções de listagem
-void listarCursos(curso *cursos, int cont);
-void exibirCursosCrescente(curso *cursos, int cont);
-void exibirCursosDecrescente(curso *cursos, int cont);
-void exibirTabela(curso *cursos, int cont);
+void listarCursos(FILE *arquivo);
+void ordenarCursosCrescente(FILE *arquivo);
+void ordenarCursosDecrescente(FILE *arquivo);
+void exibirTabela(curso *vetorCursos, int tamanhoVetor);
 char *verificaModalidadeCurso(char modalidadeCurso);
+void criarVetorCursos(curso *vetorCursos, int tamanhoVetor, FILE *arquivo);
+int definirTamanhoVetor(FILE *arquivo);
+
+// Protótipos das funções de arquivo
+void criarArquivo();
 
 // ==========================
 // ========== MAIN ==========
 // ==========================
 int main()
 {
-    setlocale(LC_ALL, "Portuguese");
-    configurarLocalidade();
+    int opcao;     // Opção do menu
+    FILE *arquivo; // Arquivo binário
+    localizacao();
 
-    FILE *arquivo;
-    arquivo = fopen("cursos.bin", "rb+");
-
-    if (arquivo == NULL) 
+    // Verifica se o arquivo existe
+    arquivo = fopen("cursos.bin", "rb");
+    if (arquivo != NULL)
     {
+        // Se o arquivo existir, fecha o arquivo
+        fclose(arquivo);
+    }
+    else
+    {
+        // Se o arquivo não existir, cria o arquivo
+        printf("Arquivo nao existe! Aguarde um instante . . .\n");
+        dormir(2);
         criarArquivo();
-        printf("Criando o arquivo...\n");
-        arquivo = fopen("cursos.bin", "rb+");
     }
 
+    // Se o arquivo existir, abre o arquivo para leitura e escrita
+    arquivo = fopen("cursos.bin", "rb+");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo!\n");
+        exit(1);
+    }
 
-    int opcao;          // Opção do menu
     do
     {
-        
         limpaTela();
         menu();
         scanf("%d", &opcao);
 
-        
         switch (opcao)
         {
         case 1:
-            // Loop para cadastrar cursos enquanto o usuário quiser
+            // Cadastrar um curso
+            limparBuffer();
             do
             {
+                limpaTela();
+
+                // Abre o arquivo para leitura e escrita
+                arquivo = fopen("cursos.bin", "ab");
+
                 // Cadastrar um curso
-                limparBuffer();
-                cadastrarCurso(arquivo);
+                curso novoCurso = cadastrarCurso(arquivo);
+
+                // Grava o curso no arquivo
+                fwrite(&novoCurso, sizeof(curso), 1, arquivo);
+                fclose(arquivo);
+                printf("Curso cadastrado com sucesso!\n");
             } while (continuar());
             break;
         case 2:
-        // Editar um curso
-            limparBuffer();
-
-            /* if (verificaContadorZero(cont))
-                editarCurso(cursos, cont);
-            else
-                printf("Nao ha cursos cadastrados!\n"); */
-
-            pausar();
+            // Editar um curso
+            // A função editarCurso não foi portada para o novo sistema de arquivos
+            printf("Funcao nao implementada!\n");
+            dormir(3);
             break;
+
         case 3:
-        // Listar os cursos
-            limparBuffer();
+            // Listar cursos
 
-           /*  if (verificaContadorZero(cont))
-                listarCursos(cursos, cont);
+            // verifica se o arquivo está vazio
+            fseek(arquivo, 0, SEEK_END);
+            if (ftell(arquivo) == 0)
+            {
+                printf("Arquivo vazio!\n");
+                dormir(1);
+                break;
+            }
             else
-                printf("Nao ha cursos cadastrados!\n"); */
+            {
+                listarCursos(arquivo);
+            }
 
-            pausar();
             break;
+
         case 4:
-        // Pesquisar um curso por modalidade
-            limparBuffer();
+            // Pesquisar curso por modalidade
 
-           /*  if (verificaContadorZero(cont))
-                pesquisarCursoModalidade(cursos, cont);
+            // verifica se o arquivo está vazio
+            fseek(arquivo, 0, SEEK_END);
+            if (ftell(arquivo) == 0)
+            {
+                printf("Arquivo vazio!\n");
+                dormir(1);
+                break;
+            }
             else
-                printf("Nao ha cursos cadastrados!\n"); */
+            {
+                pesquisarCursoModalidade(arquivo);
+            }
 
-            pausar();
             break;
         case 5:
-        // Excluir um curso
+            // Excluir um curso
             limparBuffer();
-            
             if (apagarArquivo())
             {
                 criarArquivo();
                 printf("Criando o arquivo...\n");
-                arquivo = fopen("cursos.bin", "rb+");
-            }
-            else
-            {
-                printf("Voltando...\n");
                 dormir(1);
+                arquivo = fopen("cursos.bin", "rb+");
             }
             break;
         case 0:
-        // Sair do programa
             printf("Saindo...\n");
             break;
         default:
@@ -170,6 +197,7 @@ int main()
             break;
         }
     } while (opcao != 0);
+
     return 0;
 }
 
@@ -181,9 +209,9 @@ int main()
 
 // Função: cadastrarCurso
 // Objetivo: Cadastrar um curso
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Curso cadastrado
-void cadastrarCurso(FILE *arquivo)
+// Parâmetros: Arquivo binário
+// Saída: Novo curso cadastrado (struct) com os dados validados
+curso cadastrarCurso(FILE *arquivo)
 {
     curso novoCurso; // Novo curso a ser cadastrado
 
@@ -213,274 +241,19 @@ void cadastrarCurso(FILE *arquivo)
 }
 // ============ FIM CADASTRO =============
 
-// ========== INICIO EDITAR ==========
-// Função: editarCurso
-// Objetivo: Editar um curso
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Nenhuma
-void editarCurso(curso *cursos, int cont)
-{
-    int cic;       // CIC do curso a ser editado
-    int posicao;   // Posição do curso no array
-    int opcao = 1; // Opção do menu
-
-    // Exibir os cursos cadastrados
-    limpaTela();
-    exibirCursosCrescente(cursos, cont);
-    pausar();
-
-    // Ler o CIC do curso a ser editado
-    printf("Digite o CIC do curso a ser editado ou 0 para voltar: ");
-    scanf("%d", &cic);
-    posicao = verificaPosicaoCic(cic, cursos, cont);
-
-    if (posicao != -1 && cic != 0)
-    {
-        // Menu de opções
-        limpaTela();
-        printf("=======================================\n");
-        printf("Curso encontrado!\n");
-        printf("CIC:\t%d\n", cursos[posicao].cic);
-        printf("Nome completo:\t%s\n", cursos[posicao].nomeCompleto);
-        printf("Sigla da escola:\t%s\n", cursos[posicao].siglaEscola);
-        printf("Modalidade do curso:\t%s\n", verificaModalidadeCurso(cursos[posicao].modalidadeCurso));
-        printf("=======================================\n");
-
-        menuEditarCurso();
-        scanf("%d", &opcao);
-
-        switch (opcao)
-        {
-        case 1:
-            printf("Digite o novo nome completo do curso: ");
-            lerNomeCompleto(cursos[posicao].nomeCompleto);
-            break;
-
-        case 2:
-            printf("Digite a nova sigla da escola: ");
-            lerSiglaEscola(cursos[posicao].siglaEscola);
-            break;
-
-        case 3:
-            printf("Digite a nova modalidade do curso: ");
-            lerModalidadeCurso(&cursos[posicao].modalidadeCurso);
-            break;
-
-        case 4:
-            printf("Você tem certeza que deseja excluir este registro? (S/N): ");
-            char opcao;
-            scanf(" %c", &opcao);
-
-            if (opcao == 'S' || opcao == 's')
-            {
-                printf("Excluindo curso...\n");
-                dormir(1);
-
-                // Excluir o curso
-                cursos[posicao].cic = 0;
-                cursos[posicao].nomeCompleto[0] = '\0';
-                cursos[posicao].siglaEscola[0] = '\0';
-                cursos[posicao].modalidadeCurso = '\0';
-
-                // Diminuir o contador de cursos cadastrados
-                cont--;
-                break;
-            }
-            else
-            {
-                printf("Voltando...\n");
-                dormir(1);
-                break;
-            }
-        case 0:
-            printf("Voltando...\n");
-            dormir(1);
-            break;
-
-        default:
-            printf("Opcao invalida! Nenhuma alteração será realizada.\n");
-            printf("Voltando...\n");
-            dormir(2);
-            break;
-        }
-    }
-    else
-    {
-        printf("Curso nao encontrado ou foi pressionado 0 para voltar! Voltando para o menu anterior...\n");
-        dormir(2);
-    }
-}
-
-// Função: verificaPosicaoCic
-// Objetivo: Verificar a posição do curso no array
-// Parâmetros: CIC do curso e array de cursos
-// Saída: Posição do curso no array
-int verificaPosicaoCic(int cic, curso *cursos, int cont)
-{
-    for (int i = 0; i < cont; i++)
-    {
-        if (cursos[i].cic == cic)
-        {
-            return i;
-        }
-    }
-
-    printf("CIC do curso nao encontrado!\n");
-    return -1;
-}
-
-// =========== FIM EDITAR =============
-
-// ========== INICIO PESQUISAR ==========
-// Função: pesquisarCurso
-// Objetivo: Pesquisar um curso por modalidade
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Nenhuma
-void pesquisarCursoModalidade(curso *cursos, int cont)
-{
-    char modalidade; // Modalidade do curso
-    int encontrou = 0;
-
-    printf("Digite a modalidade do curso (P - Presencial, S - Semipresencial, D - Distância): ");
-    lerModalidadeCurso(&modalidade);
-
-    // Exibir os cursos cadastrados
-    limpaTela();
-
-    printf("CIC\t\tNome Completo\t\tSigla da Escola\t\tModalidade do Curso\n");
-    for (int i = 0; i < cont; i++)
-    {
-        if (cursos[i].modalidadeCurso == modalidade)
-        {
-            printf("%d\t\t%s\t\t%s\t\t%s\n", cursos[i].cic, cursos[i].nomeCompleto, cursos[i].siglaEscola, verificaModalidadeCurso(cursos[i].modalidadeCurso));
-            encontrou = 1;
-        }
-    }
-
-    if (!encontrou)
-    {
-        printf("Nenhum curso encontrado!\n");
-    }
-}
-
-// =========== FIM PESQUISAR =============
-
-// ========== INICIO LISTAR ===========
-
-// Função: verificaModalidadeCurso
-// Objetivo: Verificar a modalidade do curso (exibir como texto os valores de P, S e D)
-// Parâmetros: Modalidade do curso
-// Saída: Modalidade do curso
-char *verificaModalidadeCurso(char modalidadeCurso)
-{
-    if (modalidadeCurso == 'P')
-    {
-        return "Presencial";
-    }
-    else if (modalidadeCurso == 'S')
-    {
-        return "Semipresencial";
-    }
-    else if (modalidadeCurso == 'D')
-    {
-        return "Distância";
-    }
-    else
-    {
-        return "Modalidade inválida";
-    }
-}
-
-// TODO : Arrumar exibição em tabela
-// Função: exibirTabela
-// Objetivo: Exibir os cursos em forma de tabela
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Nenhuma
-void exibirTabela(curso *cursos, int cont)
-{
-    printf("CIC\t\tNome Completo\t\tSigla da Escola\t\tModalidade do Curso\n");
-    for (int i = 0; i < cont; i++)
-        printf("%d\t\t%s\t\t%s\t\t%s\n", cursos[i].cic, cursos[i].nomeCompleto, cursos[i].siglaEscola, verificaModalidadeCurso(cursos[i].modalidadeCurso));
-}
-
-// Função: listarCursos
-// Objetivo: Listar os cursos
-// Parâmetros: Nenhum
-// Saída: Nenhuma
-void listarCursos(curso *cursos, int cont)
-{
-    int opcao;
-
-    do
-    {
-        menuListarCursos();
-        scanf("%d", &opcao);
-
-        switch (opcao)
-        {
-        case 1:
-            limpaTela();
-            exibirCursosCrescente(cursos, cont);
-            limparBuffer();
-            pausar();
-            break;
-
-        case 2:
-            limpaTela();
-            exibirCursosDecrescente(cursos, cont);
-            limparBuffer();
-            pausar();
-            break;
-
-        case 3:
-            limpaTela();
-            ordenarNomeCrescente(cursos, cont);
-            limparBuffer();
-            pausar();
-            break;
-
-        case 4:
-            limpaTela();
-            ordenarNomeDecrescente(cursos, cont);
-            limparBuffer();
-            pausar();
-            break;
-
-        case 0:
-            printf("Voltando...\n");
-            dormir(1);
-            break;
-
-        default:
-            printf("Opcao invalida!\n");
-            limparBuffer();
-            break;
-        }
-    } while (opcao != 0);
-}
-
-// ============ FIM LISTAR =============
-
 // ============ INICIO LER ============
 
 // Função: lerCic
 // Objetivo: Ler o CIC do curso
-// Parâmetros: Ponteiro para armazenar o CIC do curso, array de cursos e contador de cursos cadastrados
+// Parâmetros: Ponteiro para armazenar o CIC do curso e arquivo binário
 // Saída: Nenhuma
-void lerCic(int *cic, FILE *arquivo) {
-    int cicExistente;
-    do {
+void lerCic(int *cic, FILE *arquivo)
+{
+    do
+    {
+        limparBuffer();
         scanf("%d", cic);
-        fseek(arquivo, 0, SEEK_SET);
-        while (fread(&cicExistente, sizeof(int), 1, arquivo)) {
-            if (cicExistente == *cic) {
-                printf("CIC do curso já existe! Digite novamente:");
-                continue;
-            }
-        }
-        break;
-    } while (1);
-    fwrite(cic, sizeof(int), 1, arquivo);
+    } while (validaCic(*cic, arquivo));
 }
 
 // Função: lerNomeCompleto
@@ -493,7 +266,6 @@ void lerNomeCompleto(char *nomeCompleto)
     {
         limparBuffer();
         scanf("%[^\n]s", nomeCompleto);
-        // removerTerminador(nomeCompleto);
     } while (validaNomeCompleto(nomeCompleto));
 }
 
@@ -506,8 +278,7 @@ void lerSiglaEscola(char *siglaEscola)
     do
     {
         limparBuffer();
-        scanf("%s", siglaEscola);
-        // removerTerminador(siglaEscola);
+        scanf("%[^\n]s", siglaEscola);
     } while (validaSiglaEscola(siglaEscola));
 }
 
@@ -520,8 +291,7 @@ void lerModalidadeCurso(char *modalidadeCurso)
     do
     {
         limparBuffer();
-        scanf(" %c", modalidadeCurso);
-
+        fgets(modalidadeCurso, 2, stdin);
         // transforma a modalidade do curso em maiúscula
         *modalidadeCurso = toupper(*modalidadeCurso);
 
@@ -534,27 +304,35 @@ void lerModalidadeCurso(char *modalidadeCurso)
 
 // Função       : validaCic
 // Objetivo     : Validar o CIC do curso
-// Parâmetros   : CIC do curso, array de cursos e contador de cursos cadastrados
+// Parâmetros   : CIC do curso e arquivo binário
 // Saída        : 0 para válido e 1 para inválido
-int validaCic(int cic, curso *cursos, int cont)
+int validaCic(int cic, FILE *arquivo)
 {
-    if (cic < MINCIC)
-    {
-        printf("CIC do curso menor que %d! Digite novamente:", MINCIC);
-        return 1;
-    }
+    // Abre o arquivo para leitura
+    arquivo = fopen("cursos.bin", "rb");
 
-    // Verifica se o CIC do curso já existe
-    for (int i = 0; i < cont; i++)
+    // vai para o início do arquivo
+    rewind(arquivo);
+
+    // Verifica se o CIC já existe no arquivo, iterando sobre as linhas do arquivo
+    curso cursoLido;
+    while (fread(&cursoLido, sizeof(curso), 1, arquivo))
     {
-        if (cursos[i].cic == cic)
+        if (cursoLido.cic == cic)
         {
-            printf("CIC do curso ja existe! Digite novamente:");
+            printf("CIC ja existe! Digite novamente:");
             return 1;
         }
     }
 
-    // Se chegar ao final da função, o CIC do curso é válido
+    // Verifica se o CIC é menor que o mínimo
+    if (cic < MINCIC)
+    {
+        printf("CIC inválido! (Digite apenas um valor acima de %d) Digite novamente:", MINCIC);
+        return 1;
+    }
+
+    // Se chegar ao final da função, o CIC é válido
     return 0;
 }
 
@@ -591,6 +369,16 @@ int validaNomeCompleto(char *nomeCompleto)
 // Saída        : 0 para válido e 1 para inválido
 int validaSiglaEscola(char *siglaEscola)
 {
+    // Valida se existe algum espaço em branco na sigla da escola
+    for (int i = 0; i < strlen(siglaEscola); i++)
+    {
+        if (siglaEscola[i] == ' ')
+        {
+            printf("Sigla da escola invalida! Digite novamente:");
+            return 1;
+        }
+    }
+
     if (siglaEscola[0] == '\n' || siglaEscola[0] == '\0' || siglaEscola[0] == ' ')
     {
         printf("Sigla da escola vazia! Digite novamente:");
@@ -600,16 +388,6 @@ int validaSiglaEscola(char *siglaEscola)
     {
         printf("Sigla da escola excede a quantidade permitida! Digite novamente:");
         return 1;
-    }
-
-    // Valida se existe algum espaço em branco na sigla da escola
-    for (int i = 0; i < strlen(siglaEscola) - 1; i++)
-    {
-        if (siglaEscola[i] == ' ')
-        {
-            printf("Sigla da escola invalida (espaços em branco)! Digite novamente:");
-            return 1;
-        }
     }
 
     // Se chegar ao final da função, a sigla da escola é válida
@@ -628,172 +406,275 @@ int validaModalidadeCurso(char modalidadeCurso)
         return 1;
     }
 
+    // Se chegar ao final da função, a modalidade do curso é válida
     return 0;
-}
-
-// Função       : verificaContadorZero
-// Objetivo     : Verificar o contador se não há cursos cadastrados
-// Parâmetros   : Contador de cursos cadastrados
-// Saída        : 0 sem cadastro e 1 com cadastro
-int verificaContadorZero(int cont)
-{
-    return (cont == 0) ? 0 : 1;
 }
 
 // ============ FIM VALIDA =============
 
-// ============= ORDENAR ===============
-
-// Função: exibirCursosCrecente
-// Objetivo: Exibir os cursos em ordem crescente
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Nenhuma
-void exibirCursosCrescente(curso *cursos, int cont)
+// ========== INICIO LISTAR ==========
+// Função       : listarCursos
+// Objetivo     : Listar os cursos
+// Parâmetros   : Arquivo binário
+// Saída        : Nenhuma
+void listarCursos(FILE *arquivo)
 {
-    // Ordenar os cursos em ordem crescente por CIC (Bubble Sort)
-    for (int i = 0; i < cont - 1; i++)
+    char opcao;
+
+    do
     {
-        for (int j = 0; j < cont - i - 1; j++)
+        menuListarCursos();
+        scanf(" %c", &opcao);
+
+        switch (opcao)
         {
-            if (cursos[j].cic > cursos[j + 1].cic)
+        case 'c':
+        case 'C':
+            // Crescente por nome
+            limpaTela();
+            fopen("cursos.bin", "rb");
+
+            // Verifica se o arquivo está vazio
+            fseek(arquivo, 0, SEEK_END);
+            if (ftell(arquivo) == 0)
             {
-                // Troca de posições
-                curso temp = cursos[j];
-                cursos[j] = cursos[j + 1];
-                cursos[j + 1] = temp;
+                printf("Arquivo vazio!\n");
+                return;
             }
-        }
-    }
 
-    // Exibir os cursos ordenados
-    printf("Cursos por CIC ASC:\n");
-    exibirTabela(cursos, cont);
-}
+            // Vai para o início do arquivo
+            rewind(arquivo);
 
-// Função: exibirCursosDecrecente
-// Objetivo: Exibir os cursos em ordem decrescente
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Nenhuma
-void exibirCursosDecrescente(curso *cursos, int cont)
-{
-    // Ordenar os cursos em ordem decrescente por CIC (Bubble Sort)
-    for (int i = 0; i < cont - 1; i++)
-    {
-        for (int j = 0; j < cont - i - 1; j++)
-        {
-            if (cursos[j].cic < cursos[j + 1].cic)
+            ordenarCursosCrescente(arquivo);
+
+            // Fecha o arquivo
+            fclose(arquivo);
+            break;
+
+        case 'd':
+        case 'D':
+            // Decrescente por nome
+            limpaTela();
+            fopen("cursos.bin", "rb");
+
+            // Verifica se o arquivo está vazio
+            fseek(arquivo, 0, SEEK_END);
+            if (ftell(arquivo) == 0)
             {
-                // Troca de posições
-                curso temp = cursos[j];
-                cursos[j] = cursos[j + 1];
-                cursos[j + 1] = temp;
+                printf("Arquivo vazio!\n");
+                return;
             }
-        }
-    }
 
-    // Exibir os cursos ordenados
-    printf("Cursos por CIC DESC:\n");
-    exibirTabela(cursos, cont);
-}
+            // Vai para o início do arquivo
+            rewind(arquivo);
 
-// Função: ordenarCursosCrecente
-// Objetivo: Ordenar os cursos em ordem crescente (A-Z)
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Nenhuma
-void ordenarNomeCrescente(curso *cursos, int cont)
-{
-    // Ordenar os cursos em ordem crescente por nome completo (Bubble Sort)
-    for (int i = 0; i < cont - 1; i++)
-    {
-        for (int j = 0; j < cont - i - 1; j++)
-        {
-            if (strcmp(cursos[j].nomeCompleto, cursos[j + 1].nomeCompleto) > 0)
-            {
-                // Troca de posições
-                curso temp = cursos[j];
-                cursos[j] = cursos[j + 1];
-                cursos[j + 1] = temp;
-            }
-        }
-    }
+            ordenarCursosDecrescente(arquivo);
 
-    // Exibir os cursos ordenados
-    printf("Cursos (A-Z) por Nome ASC:\n");
-    exibirTabela(cursos, cont);
-}
+            // Fecha o arquivo
+            fclose(arquivo);
+            break;
 
-// Função: ordenarCursosDecrecente
-// Objetivo: Ordenar os cursos em ordem decrescente (Z-A)
-// Parâmetros: Array de cursos e contador de cursos cadastrados
-// Saída: Nenhuma
-void ordenarNomeDecrescente(curso *cursos, int cont)
-{
-    // Ordenar os cursos em ordem decrescente por nome completo (Bubble Sort)
-    for (int i = 0; i < cont - 1; i++)
-    {
-        for (int j = 0; j < cont - i - 1; j++)
-        {
-            if (strcmp(cursos[j].nomeCompleto, cursos[j + 1].nomeCompleto) < 0)
-            {
-                // Troca de posições
-                curso temp = cursos[j];
-                cursos[j] = cursos[j + 1];
-                cursos[j + 1] = temp;
-            }
-        }
-    }
-
-    // Exibir os cursos ordenados
-    printf("Cursos (Z-A) por Nome DESC:\n");
-    exibirTabela(cursos, cont);
-}
-
-// ============ FIM ORDENAR ============
-
-// ========== INICIO ARQUIVOS ==========
-// Função: criarArquivo
-// Objetivo: Criar o arquivo binário
-// Parâmetros: Nenhum
-// Saída: Nenhuma
-void criarArquivo()
-{
-    FILE *arquivo;
-    arquivo = fopen("cursos.bin", "wb");
-
-    if (arquivo == NULL)
-    {
-        printf("Erro ao criar o arquivo!\n");
-        exit(1);
-    }
-
-    fclose(arquivo);
-}
-
-// Função: apagarArquivo
-// Objetivo: Apagar o arquivo binário
-// Parâmetros: Nenhum
-// Saída: Nenhuma
-int apagarArquivo()
-{
-        printf("Você tem certeza que deseja apagar o arquivo? Todos os dados serão perdidos!\n");
-        if (continuar())
-        {
-            remove("cursos.bin");
-            printf("Removendo . . .\n");
-            printf("Arquivo apagado com sucesso!\n");
-            dormir(5);
-            return 1;
-        }
-        else
-        {
+        case '0':
             printf("Voltando...\n");
             dormir(1);
-            return 0;
+            break;
+        default:
+            printf("Opcao invalida!\n");
+            dormir(1);
+            break;
         }
+
+        limparBuffer();
+    } while (opcao != '0');
+}
+
+// Função       : criarVetorCursos
+// Objetivo     : ler os cursos do arquivo binário e armazenar no vetor de cursos (struct)
+// Parâmetros   : Vetor de cursos e tamanho do vetor
+// Saída        : Nenhuma
+void criarVetorCursos(curso *vetorCursos, int tamanhoVetor, FILE *arquivo)
+{
+    // Vai para o início do arquivo
+    rewind(arquivo);
+
+    // Lê os cursos do arquivo e armazena no vetor de cursos
+    for (int i = 0; i < tamanhoVetor; i++)
+    {
+        fread(&vetorCursos[i], sizeof(curso), 1, arquivo);
     }
 }
 
-// ========== FIM ARQUIVOS =============
+// Função       : definirTamanhoVetor
+// Objetivo     : Definir o tamanho do vetor de cursos
+// Parâmetros   : Arquivo binário
+// Saída        : Tamanho do vetor de cursos
+int definirTamanhoVetor(FILE *arquivo)
+{
+    // Vai para o início do arquivo
+    rewind(arquivo);
+
+    // Verifica o tamanho do arquivo
+    fseek(arquivo, 0, SEEK_END);
+    int tamanhoArquivo = ftell(arquivo);
+
+    // Define o tamanho do vetor de cursos
+    int tamanhoVetor = tamanhoArquivo / sizeof(curso);
+
+    return tamanhoVetor;
+}
+
+// Função       : ordenarCursosDecrescente
+// Objetivo     : Ordenar os cursos em ordem decrescente por nome
+// Parâmetros   : Arquivo binário
+// Saída        : Nenhuma
+void ordenarCursosDecrescente(FILE *arquivo)
+{
+    // Define o tamanho do vetor de cursos
+    int tamanhoVetor = definirTamanhoVetor(arquivo);
+
+    // Cria o vetor de cursos
+    curso vetorCursos[tamanhoVetor];
+
+    // Cria o vetor de cursos
+    criarVetorCursos(vetorCursos, tamanhoVetor, arquivo);
+
+    // Ordena o vetor de cursos em ordem decrescente por nome (bubble sort)
+    for (int i = 0; i < tamanhoVetor; i++)
+    {
+        for (int j = i + 1; j < tamanhoVetor; j++)
+        {
+            if (strcmp(vetorCursos[i].nomeCompleto, vetorCursos[j].nomeCompleto) < 0)
+            {
+                curso aux = vetorCursos[i];
+                vetorCursos[i] = vetorCursos[j];
+                vetorCursos[j] = aux;
+            }
+        }
+    }
+
+    // Exibe o vetor de cursos ordenado
+    printf("DESC por nome:\n");
+    exibirTabela(vetorCursos, tamanhoVetor);
+}
+
+// Função       : ordenarCursosCrescente
+// Objetivo     : Ordenar os cursos em ordem crescente por nome
+// Parâmetros   : Arquivo binário
+// Saída        : Nenhuma
+void ordenarCursosCrescente(FILE *arquivo)
+{
+    // Define o tamanho do vetor de cursos
+    int tamanhoVetor = definirTamanhoVetor(arquivo);
+
+    // Cria o vetor de cursos
+    curso vetorCursos[tamanhoVetor];
+
+    // Cria o vetor de cursos
+    criarVetorCursos(vetorCursos, tamanhoVetor, arquivo);
+
+    // Ordena o vetor de cursos em ordem crescente por nome (bubble sort)
+    for (int i = 0; i < tamanhoVetor; i++)
+    {
+        for (int j = i + 1; j < tamanhoVetor; j++)
+        {
+            if (strcmp(vetorCursos[i].nomeCompleto, vetorCursos[j].nomeCompleto) > 0)
+            {
+                curso aux = vetorCursos[i];
+                vetorCursos[i] = vetorCursos[j];
+                vetorCursos[j] = aux;
+            }
+        }
+    }
+
+    // Exibe o vetor de cursos ordenado
+    printf("ASC por nome:\n");
+    exibirTabela(vetorCursos, tamanhoVetor);
+}
+
+// Função: exibirTabela
+// Objetivo: Exibir os cursos em forma de tabela
+// Parâmetros: Vetor de cursos e tamanho do vetor
+// Saída: Nenhuma
+void exibirTabela(curso *vetorCursos, int tamanhoVetor)
+{
+    printf("CIC\t\tNome Completo\t\tSigla Escola\t\tModalidade\n");
+    for (int i = 0; i < tamanhoVetor; i++)
+    {
+        printf("%d\t\t%s\t\t%s\t\t%s\n", vetorCursos[i].cic, vetorCursos[i].nomeCompleto, vetorCursos[i].siglaEscola, verificaModalidadeCurso(vetorCursos[i].modalidadeCurso));
+    }
+
+    pausar();
+}
+
+// Função: verificaModalidadeCurso
+// Objetivo: Verificar a modalidade do curso (exibir como texto os valores de P, S e D)
+// Parâmetros: Modalidade do curso
+// Saída: Modalidade do curso
+char *verificaModalidadeCurso(char modalidadeCurso)
+{
+    if (modalidadeCurso == 'P')
+    {
+        return "Presencial";
+    }
+    else if (modalidadeCurso == 'S')
+    {
+        return "Semipresencial";
+    }
+    else if (modalidadeCurso == 'D')
+    {
+        return "Distância";
+    }
+    else
+    {
+        return "";
+    }
+}
+// ============ FIM LISTAR ============
+
+// ========== INICIO PESQUISAR ==========
+
+// Função       : pesquisarCursoModalidade
+// Objetivo     : Pesquisar um curso por modalidade
+// Parâmetros   : Arquivo binário
+// Saída        : Nenhuma
+void pesquisarCursoModalidade(FILE *arquivo)
+{
+    char modalidadeCurso;
+    int encontrou = 0;
+    limparBuffer();
+    limpaTela();
+
+    // Lê a modalidade do curso
+    printf("Digite a modalidade do curso (P - Presencial, S - Semipresencial, D - Distância):");
+    lerModalidadeCurso(&modalidadeCurso);
+
+    // Define o tamanho do vetor de cursos
+    int tamanhoVetor = definirTamanhoVetor(arquivo);
+
+    // Cria o vetor de cursos
+    curso cursos[tamanhoVetor];
+
+    // Cria o vetor de cursos
+    criarVetorCursos(cursos, tamanhoVetor, arquivo);
+
+    // Exibe o vetor de cursos ordenado
+    printf("CIC\t\tNome Completo\t\tSigla Escola\t\tModalidade\n");
+    for (int i = 0; i < tamanhoVetor; i++)
+    {
+        if (cursos[i].modalidadeCurso == modalidadeCurso)
+        {
+            printf("%d\t\t%s\t\t%5s\t\t%s\n", cursos[i].cic, cursos[i].nomeCompleto, cursos[i].siglaEscola, verificaModalidadeCurso(cursos[i].modalidadeCurso));
+            encontrou = 1;
+        }
+    }
+
+    if (!encontrou)
+    {
+        printf("Nenhum curso encontrado!\n");
+    }
+
+    pausar();
+}
 
 // ========== INICIO SISTEMA ==========
 // Função       : menu
@@ -810,7 +691,7 @@ void menu()
     printf("2 - Editar curso\n");
     printf("3 - Listar cursos\n");
     printf("4 - Pesquisar curso por modalidade\n");
-    printf("5 - Excluir curso\n");
+    printf("5 - Excluir arquivo\n");
     printf("0 - Sair\n");
     printf("Digite a opção desejada: ");
 }
@@ -826,11 +707,8 @@ void menuListarCursos()
     printf("========================================\n");
     printf("========== LISTAR CURSOS ===============\n");
     printf("========================================\n");
-
-    printf("1 - Crescente por CIC\n");
-    printf("2 - Decrescente por CIC\n");
-    printf("3 - Crescente por Nome\n");
-    printf("4 - Decrescente por Nome\n");
+    printf("C - Crescente por Nome\n");
+    printf("D - Decrescente por Nome\n");
     printf("0 - Voltar\n");
     printf("Digite a opção desejada: ");
 }
@@ -881,28 +759,15 @@ void limparBuffer()
 }
 
 // Função       : pausar
-// Objetivo     : Pausar o sistema
+// Objetivo     : Pausar o sistema até o usuário pressionar enter
 // Parâmetros   : Nenhum
 // Saída        : Nenhuma
 void pausar()
 {
-    printf("\nPressione qualquer tecla para continuar...\n");
+    printf("\nPressione ENTER para continuar . . .\n");
+    while (getchar() != '\n')
+        ;
     getchar();
-}
-
-// Função      : dormir
-// Objetivo    : Dormir o sistema pelo tempo informado (em segundos)
-// Parâmetros  : Nenhum
-// Saída       : Nenhuma
-void dormir(int segundos)
-{
-#if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
-    sleep(segundos);
-#endif
-
-#if defined(_WIN32) || defined(_WIN64)
-    Sleep(segundos * 1000);
-#endif
 }
 
 // Função       : continuar
@@ -926,19 +791,95 @@ int continuar()
     }
 }
 
-// Função       : configurarLocalidade
-// Objetivo     : Configurar a localidade para o português
+// Função       : dormir
+// Objetivo     : Pausar o sistema por alguns segundos
+// Parâmetros   : Número de segundos
+// Saída        : Nenhuma
+void dormir(int segundos)
+{
+#if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+    sleep(segundos);
+#endif
+
+#if defined(_WIN32) || defined(_WIN64)
+
+    Sleep(segundos * 1000);
+#endif
+}
+
+// Função       : localizacao
+// Objetivo     : Definir a localização do sistema
 // Parâmetros   : Nenhum
 // Saída        : Nenhuma
-void configurarLocalidade()
+void localizacao()
 {
 #if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
     setlocale(LC_ALL, "pt_BR.UTF-8");
 #endif
 
 #if defined(_WIN32) || defined(_WIN64)
-    setlocale(LC_ALL, "Portuguese");
+    setlocale(LC_ALL, "");
 #endif
 }
 
 // ============ FIM SISTEMA ============
+
+// ========== INICIO ARQUIVO ===========
+
+// Função       : criarArquivo
+// Objetivo     : Criar o arquivo binário
+// Parâmetros   : Nenhum
+// Saída        : Nenhuma
+void criarArquivo()
+{
+    FILE *arquivo;
+
+    arquivo = fopen("cursos.bin", "wb");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao criar o arquivo!\n");
+        exit(1);
+    }
+    fclose(arquivo);
+}
+
+// Função: apagarArquivo
+// Objetivo: Apagar o arquivo binário
+// Parâmetros: Nenhum
+// Saída: Nenhuma
+int apagarArquivo()
+{
+    printf("Você tem certeza que deseja apagar o arquivo? Todos os dados serão perdidos!\n");
+    if (continuar())
+    {
+        remove("cursos.bin");
+        printf("Removendo . . .\n");
+        dormir(1);
+        printf("Arquivo apagado com sucesso!\n");
+        dormir(1);
+        return 1;
+    }
+    else
+    {
+        printf("Voltando...\n");
+        dormir(1);
+        return 0;
+    }
+}
+
+// ============ FIM ARQUIVO ============
+
+
+// Pela falta de tempo, não consegui implementar as funções de editar abaixo.
+
+// ========== INICIO EDITAR ==========
+// Função: editarCurso
+// Objetivo: Editar um curso
+// Parâmetros: Arquivo binário
+// Saída: Nenhuma
+void editarCurso(FILE *arquivo)
+{
+
+}
+
+// =========== FIM EDITAR =============

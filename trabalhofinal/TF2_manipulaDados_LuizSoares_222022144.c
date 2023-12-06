@@ -469,8 +469,7 @@ void lerSiglaEscola(char *siglaEscola)
     do
     {
         limparBuffer();
-        scanf("%s", siglaEscola);
-        // removerTerminador(siglaEscola);
+        scanf("%5s", siglaEscola);
     } while (validaSiglaEscola(siglaEscola));
 }
 
@@ -483,7 +482,7 @@ void lerModalidadeCurso(char *modalidadeCurso)
     do
     {
         limparBuffer();
-        scanf(" %c", modalidadeCurso);
+        fgets(modalidadeCurso, 2, stdin);
 
         // transforma a modalidade do curso em maiúscula
         *modalidadeCurso = toupper(*modalidadeCurso);
