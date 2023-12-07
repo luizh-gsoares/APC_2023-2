@@ -264,7 +264,7 @@ void lerNomeCompleto(char *nomeCompleto)
     do
     {
         limparBuffer();
-        scanf("%[^\n]s", nomeCompleto);
+        fgets(nomeCompleto, MAXNOME + 1, stdin);
     } while (validaNomeCompleto(nomeCompleto));
 }
 
@@ -277,7 +277,7 @@ void lerSiglaEscola(char *siglaEscola)
     do
     {
         limparBuffer();
-        scanf("%[^\n]s", siglaEscola);
+        fgets(siglaEscola, MINIMO + 1, stdin);
     } while (validaSiglaEscola(siglaEscola));
 }
 
@@ -291,6 +291,7 @@ void lerModalidadeCurso(char *modalidadeCurso)
     {
         limparBuffer();
         fgets(modalidadeCurso, 2, stdin);
+        
         // transforma a modalidade do curso em maiúscula
         *modalidadeCurso = toupper(*modalidadeCurso);
 
